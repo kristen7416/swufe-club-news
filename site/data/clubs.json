@@ -1,0 +1,17 @@
+{
+  "clubs": [
+    {
+      "id": "club_example",
+      "name": "示例社团",
+      "wechat_name": "SWUFE 示例社团",
+      "wechat_id": "example_wechat_id",
+      "biz": "",
+      "category": "其他",
+      "description": "",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2025-05-22"
+    }
+  ],
+  "last_updated": "2025-05-22T00:00:00+08:00"
+}

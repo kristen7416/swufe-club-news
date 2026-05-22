@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SWUFE 社团活动</title>
+  <meta name="description" content="西南财经大学社团活动资讯聚合平台 - 一站式查看全校社团活动">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+  <link rel="preload" href="data/activities.json" as="fetch" crossorigin="anonymous">
+  <link rel="preload" href="data/clubs.json" as="fetch" crossorigin="anonymous">
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <header class="app-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="/" class="logo-link">
+          <h1 class="logo">SWUFE 社团活动</h1>
+        </a>
+        <div class="search-box">
+          <input type="search" id="searchInput" placeholder="搜索活动或社团..." aria-label="搜索">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- 加载提示 -->
+    <div id="loadingIndicator" class="loading-indicator" role="status">
+      <span class="spinner"></span>
+      <span>加载中...</span>
+    </div>
+
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <!-- 分类筛选 -->
+      <nav class="categories" id="categoryNav" aria-label="活动分类">
+        <a href="#" data-category="all" class="active" role="button">全部</a>
+        <a href="#" data-category="学术科技" role="button">学术科技</a>
+        <a href="#" data-category="文化艺术" role="button">文化艺术</a>
+        <a href="#" data-category="体育竞技" role="button">体育竞技</a>
+        <a href="#" data-category="志愿服务" role="button">志愿服务</a>
+        <a href="#" data-category="创新创业" role="button">创新创业</a>
+        <a href="#" data-category="其他" role="button">其他</a>
+      </nav>
+
+      <!-- 状态标签 -->
+      <div class="status-tabs" id="statusTabs" role="tablist">
+        <span data-status="all" class="active" role="tab">全部</span>
+        <span data-status="upcoming" role="tab" class="tab-upcoming">即将开始</span>
+        <span data-status="ongoing" role="tab" class="tab-ongoing">进行中</span>
+        <span data-status="ended" role="tab" class="tab-ended">已结束</span>
+      </div>
+    </div>
+
+    <!-- 活动列表 -->
+    <section class="activity-grid" id="activityGrid" aria-label="活动列表">
+    </section>
+
+    <!-- 加载更多 -->
+    <div class="load-more" id="loadMore">
+      <button class="secondary">加载更多</button>
+    </div>
+  </main>
+
+  <!-- 活动详情弹窗 -->
+  <dialog id="activityDialog">
+    <article>
+      <header>
+        <button aria-label="关闭" rel="prev" id="closeDialog"></button>
+        <h2 id="dialogTitle"></h2>
+      </header>
+      <div id="dialogBody"></div>
+    </article>
+  </dialog>
+
+  <!-- 底部 -->
+  <footer class="app-footer">
+    <div class="container">
+      <p>
+        <span>数据来源：各社团微信公众号</span>
+        <span class="footer-sep">|</span>
+        <span>更新于 <span id="lastUpdated"></span></span>
+        <span class="footer-sep">|</span>
+        <a href="https://github.com/kristen7416/swufe-club-news" target="_blank" rel="noopener">GitHub</a>
+      </p>
+      <p class="footer-sub">
+        社团信息持续收集中 · 如需收录或修正请联系我们
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
