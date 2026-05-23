@@ -98,14 +98,11 @@ def merge_activities(existing: list, extracted: list, manual: list) -> list:
             continue
         if key in merged:
             existing_act = merged[key]
-            # 保留人工提交的字段
-            if existing_act.get("source") == "manual":
-                act.setdefault("location",
-                    existing_act.get("location") or act.get("location", ""))
-                act.setdefault("start_time",
-                    existing_act.get("start_time") or act.get("start_time", ""))
-                act.setdefault("contact",
-                    existing_act.get("contact", ""))
+            # 保留已有数据的非空字段（人工 / 补全）
+            enrich_fields = ["location", "contact", "start_time", "end_time", "description"]
+            for field in enrich_fields:
+                if existing_act.get(field) and not act.get(field):
+                    act[field] = existing_act[field]
         act["status"] = compute_status(act)
         merged[key] = act
 

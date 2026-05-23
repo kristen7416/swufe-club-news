@@ -12,11 +12,27 @@ import json
 import os
 import re
 import sys
+import time
+import random
+import html as html_mod
 from datetime import datetime, timedelta, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+import requests
+
 from utils import load_json, save_json
+
+
+def safe_print(*args, **kwargs):
+    """终端兼容打印（处理 GBK 无法编码的字符）"""
+    text = " ".join(str(a) for a in args)
+    try:
+        print(text, **kwargs)
+    except UnicodeEncodeError:
+        # 编码为终端编码，替换无法显示的字符
+        enc = sys.stdout.encoding or "utf-8"
+        print(text.encode(enc, errors="replace").decode(enc, errors="replace"), **kwargs)
 
 # ===== 配置 =====
 CONFIG = {
@@ -33,6 +49,91 @@ def resolve(path):
     if os.path.isabs(path):
         return path
     return os.path.join(PROJECT_ROOT, path)
+
+
+# ===== 文章内容抓取 =====
+
+FETCH_CONFIG = {
+    "enabled": True,
+    "delay_min": 3,
+    "delay_max": 6,
+    "timeout": 15,
+    "max_retries": 2,
+}
+
+FETCH_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Linux; Android 13; SM-S9080) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "zh-CN,zh;q=0.9",
+}
+
+
+def extract_text_from_article_html(html_text: str) -> str:
+    """从微信文章 HTML 中提取纯文本正文"""
+    if not html_text:
+        return ""
+
+    for pattern in [
+        r'class="rich_media_content[^"]*"[^>]*>(.*?)</div>\s*<script',
+        r'id="js_content"[^>]*>(.*?)</div>\s*<script',
+    ]:
+        m = re.search(pattern, html_text, re.DOTALL)
+        if m:
+            content = m.group(1)
+            content = re.sub(r'<br\s*/?>', '\n', content)
+            content = re.sub(r'</p>', '\n</p>', content)
+            content = re.sub(r'</section>', '\n</section>', content)
+            content = re.sub(r'<[^>]+>', '', content)
+            content = html_mod.unescape(content)
+            content = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f]', '', content)
+            content = re.sub(r'\n{3,}', '\n\n', content)
+            content = re.sub(r'[ \t]{2,}', ' ', content)
+            content = content.strip()
+            if content:
+                return content
+    return ""
+
+
+def fetch_article_text(url: str) -> str:
+    """抓取微信文章 HTML 并提取正文文本"""
+    if not url or "mp.weixin.qq.com" not in url:
+        return ""
+
+    for attempt in range(FETCH_CONFIG["max_retries"] + 1):
+        try:
+            r = requests.get(url, headers=FETCH_HEADERS, timeout=FETCH_CONFIG["timeout"])
+            r.encoding = "utf-8"
+
+            if r.status_code != 200:
+                print(f"    [抓取] HTTP {r.status_code}, 跳过: {url[:50]}...")
+                return ""
+
+            if "访问异常" in r.text or "js_verify" in r.text:
+                if attempt < FETCH_CONFIG["max_retries"]:
+                    wait = (attempt + 1) * 5
+                    print(f"    [抓取] 验证页, {wait}s 后重试...")
+                    time.sleep(wait)
+                    continue
+                print(f"    [抓取] 验证页无法绕过, 跳过: {url[:50]}...")
+                return ""
+
+            text = extract_text_from_article_html(r.text)
+            if text:
+                return text
+
+            print(f"    [抓取] 未能提取正文, 跳过: {url[:50]}...")
+            return ""
+
+        except requests.RequestException as e:
+            if attempt < FETCH_CONFIG["max_retries"]:
+                wait = (attempt + 1) * 3
+                print(f"    [抓取] 请求失败: {e}, {wait}s 后重试...")
+                time.sleep(wait)
+                continue
+            print(f"    [抓取] 请求失败已达最大重试: {e}")
+            return ""
+
+    return ""
 
 
 # ===== 活动关键词 =====
@@ -208,18 +309,31 @@ def extract_activity_fallback(title: str, description: str) -> dict:
 def extract_activity(article: dict, club: dict) -> dict:
     """
     从文章对象中提取活动信息
+    优先从文章 URL 抓取正文进行提取，其次使用摘要
     """
     title = article.get("title", "")
     description = article.get("description", "")
     content = article.get("content", "")
+    article_url = article.get("article_url", "")
 
-    # 合并文本源
-    text = f"{title}\n{description}"
-    if content:
-        text += f"\n{content[:2000]}"
+    # 尝试抓取文章正文
+    article_body = ""
+    if FETCH_CONFIG["enabled"] and article_url:
+        print(f"    [抓取] {article_url[:60]}...")
+        article_body = fetch_article_text(article_url)
+        if article_body:
+            print(f"    [抓取] 获取正文 {len(article_body)} 字符")
+        else:
+            print(f"    [抓取] 未获取到正文")
+        # 请求间隔
+        time.sleep(random.uniform(FETCH_CONFIG["delay_min"], FETCH_CONFIG["delay_max"]))
 
-    desc_text = (description or "") + "\n" + (content or "")
-    extracted = extract_activity_fallback(title, desc_text.strip())
+    # 合并文本源：全文 > 摘要
+    full_text = title + "\n" + (article_body or description or "")
+    if content and not article_body:
+        full_text += "\n" + content[:2000]
+
+    extracted = extract_activity_fallback(title, full_text)
 
     activity = {
         "id": f"act_{article.get('article_id', '')[:12]}" or f"act_{datetime.now(BEIJING_TZ).timestamp():.0f}",
@@ -282,8 +396,128 @@ def normalize_article(article: dict) -> dict:
     return result
 
 
+def enrich_existing_activities():
+    """读取现有 activities.json，抓取文章正文补全缺失字段"""
+    activities_path = resolve("site/data/activities.json")
+    data = load_json(activities_path, {"activities": []})
+    activities = data.get("activities", [])
+
+    if not activities:
+        print("[enrich] 没有活动需要补全")
+        return
+
+    # 加载社团信息用于分类
+    clubs_data = load_json(resolve(CONFIG["clubs_path"]), {"clubs": []})
+    clubs_map = {c["id"]: c for c in clubs_data.get("clubs", []) if c.get("id")}
+
+    updated = 0
+    for act in activities:
+        # 检查哪些字段缺失
+        missing = []
+        if not act.get("contact"):
+            missing.append("contact")
+        if not act.get("location"):
+            missing.append("location")
+        if not act.get("start_time"):
+            missing.append("start_time")
+        if not act.get("end_time"):
+            missing.append("end_time")
+        if not act.get("description") or len(act.get("description", "")) < 20:
+            missing.append("description")
+
+        if not missing:
+            continue
+
+        url = act.get("article_url", "")
+        if not url:
+            continue
+
+        title_clean = act['title'].encode('utf-8', errors='replace').decode('utf-8', errors='replace')[:40]
+        safe_print(f"\n  [enrich] {act['id']} {title_clean}")
+        safe_print(f"           缺失: {', '.join(missing)}")
+        safe_print(f"           文章: {url[:60]}...")
+
+        article_text = fetch_article_text(url)
+        if not article_text:
+            continue
+
+        safe_print(f"           获取正文 {len(article_text)} 字符")
+
+        # 对缺失字段逐一提取
+        title = act.get("title", "")
+        text = f"{title}\n{article_text}"
+
+        if not act.get("contact"):
+            contact = extract_contact(text)
+            if contact:
+                act["contact"] = contact
+                safe_print(f"           提取联系方式: {contact}")
+
+        if not act.get("location"):
+            location = extract_location(text)
+            if location:
+                act["location"] = location
+                safe_print(f"           提取地点: {location}")
+
+        if not act.get("start_time"):
+            start_time = extract_time(text)
+            if start_time:
+                act["start_time"] = start_time
+                act["status"] = compute_status(start_time)
+                safe_print(f"           提取开始时间: {start_time}")
+
+        if not act.get("end_time"):
+            end_time = extract_end_time(text, act.get("start_time", ""))
+            if end_time:
+                act["end_time"] = end_time
+                safe_print(f"           提取结束时间: {end_time}")
+
+        if not act.get("description") or len(act.get("description", "")) < 20:
+            # 使用文章正文前 200 字作为描述
+            desc = article_text[:200].strip()
+            if desc:
+                act["description"] = desc
+                safe_print(f"           更新描述: {desc[:40]}...")
+
+        updated += 1
+        time.sleep(random.uniform(FETCH_CONFIG["delay_min"], FETCH_CONFIG["delay_max"]))
+
+    # 保存
+    if updated > 0:
+        data["last_updated"] = datetime.now(BEIJING_TZ).isoformat()
+        # 更新统计
+        status_counts = {"upcoming": 0, "ongoing": 0, "ended": 0}
+        for a in activities:
+            s = a.get("status", "upcoming")
+            if s in status_counts:
+                status_counts[s] += 1
+        data["status_counts"] = status_counts
+        data["total_count"] = len(activities)
+
+        save_json(activities_path, data)
+        safe_print(f"\n[enrich] 完成! 更新 {updated}/{len(activities)} 个活动")
+    else:
+        safe_print("\n[enrich] 所有活动字段已完整，无需更新")
+
+
 def main():
-    print(f"[extract_activity] 启动 | mode={CONFIG['mode']}")
+    import argparse
+
+    parser = argparse.ArgumentParser(description="活动信息提取模块")
+    parser.add_argument("--enrich", action="store_true", help="补全现有 activities.json 的缺失字段")
+    parser.add_argument("--no-fetch", action="store_true", help="禁用文章正文抓取")
+    args = parser.parse_args()
+
+    if args.no_fetch:
+        FETCH_CONFIG["enabled"] = False
+        print("[extract_activity] 文章正文抓取已禁用")
+
+    if args.enrich:
+        print(f"[extract_activity] 补全模式 | {datetime.now(BEIJING_TZ).isoformat()}")
+        enrich_existing_activities()
+        return
+
+    print(f"[extract_activity] 提取模式 | mode={CONFIG['mode']}")
 
     # 加载爬虫原始数据
     raw_data = load_json(resolve(CONFIG["raw_path"]), {"articles": []})
