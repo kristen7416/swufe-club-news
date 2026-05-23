@@ -16,3 +16,7 @@ Thumbs.db
 # 本地配置文件
 *.local.*
 credentials.json
+
+# 中间数据文件 (由 pipeline 生成)
+site/data/raw_articles.json
+site/data/extracted_activities.json

@@ -1,17 +1,17 @@
 {
   "clubs": [
     {
-      "id": "club_example",
-      "name": "示例社团",
-      "wechat_name": "SWUFE 示例社团",
-      "wechat_id": "example_wechat_id",
-      "biz": "",
-      "category": "其他",
-      "description": "",
+      "id": "club_001",
+      "name": "不语配音社",
+      "wechat_name": "不语配音社",
+      "wechat_id": "gh_29cb81b1fce6",
+      "biz": "MzkzMjYwNTg4NA==",
+      "category": "文化艺术",
+      "description": "西南财经大学不语配音社，用声音演绎精彩",
       "avatar_url": "",
       "is_active": true,
       "created_at": "2025-05-22"
     }
   ],
-  "last_updated": "2025-05-22T00:00:00+08:00"
+  "last_updated": "2025-05-23T00:00:00+08:00"
 }

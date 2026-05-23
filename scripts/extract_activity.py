@@ -154,7 +154,7 @@ def extract_activity_fallback(title: str, description: str) -> dict:
 
     return {
         "title": title,
-        "description": description or title,
+        "description": (description.strip() or title).strip(),
         "location": extract_location(text),
         "start_time": extract_time(text),
         "end_time": "",
@@ -174,7 +174,8 @@ def extract_activity(article: dict, club: dict) -> dict:
     if content:
         text += f"\n{content[:2000]}"
 
-    extracted = extract_activity_fallback(title, description + "\n" + (content or ""))
+    desc_text = (description or "") + "\n" + (content or "")
+    extracted = extract_activity_fallback(title, desc_text.strip())
 
     activity = {
         "id": f"act_{article.get('article_id', '')[:12]}" or f"act_{datetime.now().timestamp():.0f}",
@@ -188,6 +189,7 @@ def extract_activity(article: dict, club: dict) -> dict:
         "article_url": article.get("article_url", ""),
         "article_id": article.get("article_id", ""),
         "cover_url": article.get("cover_url", ""),
+        "publish_time": article.get("publish_time", ""),
         "contact": "",
         "source": "crawl",
         "status": compute_status(extracted["start_time"]),
@@ -213,17 +215,41 @@ def compute_status(start_time: str) -> str:
         return "upcoming"
 
 
+def normalize_article(article: dict) -> dict:
+    """统一新旧文章字段名，兼容 crawl_wechat.py 的新格式"""
+    mapping = {
+        "article_id": article.get("aid") or article.get("article_id", ""),
+        "article_url": article.get("link") or article.get("article_url", ""),
+        "cover_url": article.get("cover") or article.get("cover_url", ""),
+        "description": article.get("digest") or article.get("description", ""),
+    }
+    # Unix 时间戳 → ISO 字符串
+    create_ts = article.get("create_time", 0)
+    if isinstance(create_ts, (int, float)) and create_ts > 1000000000:
+        from datetime import timezone
+        mapping["publish_time"] = datetime.fromtimestamp(create_ts, tz=timezone.utc).isoformat()
+    else:
+        mapping["publish_time"] = article.get("publish_time", "")
+
+    result = dict(article)
+    result.update(mapping)
+    return result
+
+
 def main():
     print(f"[extract_activity] 启动 | mode={CONFIG['mode']}")
 
     # 加载爬虫原始数据
     raw_data = load_json(resolve(CONFIG["raw_path"]), {"articles": []})
-    articles = raw_data.get("articles", [])
+    raw_articles = raw_data.get("articles", [])
 
-    if not articles:
+    if not raw_articles:
         print("[extract_activity] 没有新文章需要处理")
         save_json(resolve(CONFIG["output_path"]), {"activities": []})
         return
+
+    # 统一字段名
+    articles = [normalize_article(a) for a in raw_articles]
 
     # 加载社团信息
     clubs_data = load_json(resolve(CONFIG["clubs_path"]), {"clubs": []})
