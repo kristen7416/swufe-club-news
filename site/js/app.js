@@ -69,6 +69,27 @@
     return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
   }
 
+  function formatTimeRange(start, end) {
+    if (!start) return '';
+    const ds = new Date(start);
+    if (isNaN(ds.getTime())) return start;
+    const month = ds.getMonth() + 1;
+    const day = ds.getDate();
+    const hour = String(ds.getHours()).padStart(2, '0');
+    const min = String(ds.getMinutes()).padStart(2, '0');
+    if (!end) return `${month}月${day}日 ${hour}:${min}`;
+    const de = new Date(end);
+    if (isNaN(de.getTime())) return `${month}月${day}日 ${hour}:${min}`;
+    const eh = String(de.getHours()).padStart(2, '0');
+    const em = String(de.getMinutes()).padStart(2, '0');
+    if (ds.toDateString() === de.toDateString()) {
+      return `${month}月${day}日 ${hour}:${min} - ${eh}:${em}`;
+    }
+    const eMonth = de.getMonth() + 1;
+    const eDay = de.getDate();
+    return `${month}月${day}日 ${hour}:${min} - ${eMonth}月${eDay}日 ${eh}:${em}`;
+  }
+
   function getStatusText(status) {
     const map = {
       upcoming: '即将开始',
@@ -229,16 +250,20 @@
       const clubName = club.name || '未知社团';
       const statusText = getStatusText(act.status);
 
+      const timeStr = formatTimeRange(act.start_time, act.end_time);
+      const dateStr = formatDate(act.start_time);
+
       return `
         <article class="activity-card" data-id="${act.id}">
           <span class="status-badge status-${act.status}">${statusText}</span>
           <h3 class="card-title">${escapeHtml(act.title)}</h3>
           <div class="card-meta">
             <span>🏛 ${escapeHtml(clubName)}</span>
-            ${act.start_time ? `<span>🕐 ${formatTime(act.start_time)}${act.end_time ? ' - ' + formatTime(act.end_time) : ''}</span>` : ''}
           </div>
-          ${act.description ? `<p class="card-desc">${escapeHtml(truncate(act.description, 100))}</p>` : ''}
-          ${act.location ? `<p class="card-meta">📍 ${escapeHtml(act.location)}</p>` : ''}
+          ${timeStr ? `<div class="card-info-row"><span class="info-icon">🗓</span><span>${timeStr}</span></div>` : ''}
+          ${act.location ? `<div class="card-info-row"><span class="info-icon">📍</span><span>${escapeHtml(act.location)}</span></div>` : ''}
+          ${act.contact ? `<div class="card-info-row contact-row"><span class="info-icon">💬</span><span>${escapeHtml(act.contact)}</span></div>` : ''}
+          ${act.description ? `<p class="card-desc">${escapeHtml(truncate(act.description, 80))}</p>` : ''}
           <div class="card-actions">
             ${act.article_url ? `<a href="${act.article_url}" target="_blank" rel="noopener" class="outline" onclick="event.stopPropagation()">📄 原文</a>` : '<span></span>'}
             <button class="detail-btn secondary" data-id="${act.id}" onclick="event.stopPropagation()">详情 →</button>
@@ -334,31 +359,37 @@
 
     DOM.dialogTitle.textContent = activity.title;
 
+    const timeStr = formatTimeRange(activity.start_time, activity.end_time);
+
     DOM.dialogBody.innerHTML = `
       <p><span class="status-badge status-${activity.status}">${statusText}</span></p>
-      <p class="dialog-section-title">社团信息</p>
       <p><strong>${escapeHtml(clubName)}</strong>${activity.category ? ' · ' + activity.category : ''}</p>
 
-      ${activity.start_time ? `
-        <p class="dialog-section-title">时间</p>
-        <p>${formatDate(activity.start_time)} ${formatTime(activity.start_time)}${activity.end_time ? ' — ' + formatTime(activity.end_time) : ''}</p>
+      ${timeStr ? `
+        <p class="dialog-section-title">⏰ 时间</p>
+        <p>${timeStr}</p>
       ` : ''}
 
       ${activity.location ? `
-        <p class="dialog-section-title">地点</p>
+        <p class="dialog-section-title">📍 地点</p>
         <p>${escapeHtml(activity.location)}</p>
+      ` : ''}
+
+      ${activity.contact ? `
+        <p class="dialog-section-title">💬 参与方式</p>
+        <p>${escapeHtml(activity.contact)}</p>
       ` : ''}
 
       ${activity.description ? `
         <hr>
-        <p class="dialog-section-title">活动介绍</p>
+        <p class="dialog-section-title">📝 活动介绍</p>
         <p>${escapeHtml(activity.description)}</p>
       ` : ''}
 
-      ${activity.contact ? `
+      ${activity.cover_url ? `
         <hr>
-        <p class="dialog-section-title">联系方式</p>
-        <p>${escapeHtml(activity.contact)}</p>
+        <p class="dialog-section-title">🖼 活动海报</p>
+        <p><img src="${escapeHtml(activity.cover_url)}" alt="活动海报" style="max-width:100%;border-radius:0.5rem;" loading="lazy"></p>
       ` : ''}
 
       <hr>

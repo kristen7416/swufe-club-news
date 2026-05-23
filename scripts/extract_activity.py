@@ -12,7 +12,7 @@ import json
 import os
 import re
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -73,6 +73,18 @@ LOCATION_PATTERNS = [
     re.compile(r"(?:在|于)\s*(\S+(?:楼|馆|厅|堂|中心|教室|操场|场|室|报告厅|会议室))"),
 ]
 
+# 联系方式提取正则
+CONTACT_PATTERNS = [
+    re.compile(r"(?:QQ群|群号|招新群)[：:]\s*(\d{5,12})"),
+    re.compile(r"(?:QQ|QQ号)[：:]\s*(\d{5,12})"),
+    re.compile(r"(?:微信|微信号)[：:]\s*([a-zA-Z][\w-]+)"),
+    re.compile(r"(?:电话|手机|联系电话)[：:]\s*(1\d{10})"),
+    re.compile(r"(?:邮箱|E[- ]?Mail)[：:]\s*([\w.@]+)"),
+]
+
+# 结束时间提取：匹配 "14:00-16:00" 中的结束时间
+END_TIME_PATTERN = re.compile(r"(\d{1,2})[:：](\d{2})\s*[—\-～~至到]\s*(\d{1,2})[:：](\d{2})")
+
 
 def is_activity_article(title: str) -> bool:
     """基于标题关键词判断是否为活动类文章"""
@@ -112,15 +124,15 @@ def extract_time(text: str) -> str:
                 groups = match.groups()
                 if len(groups) == 5 and all(g.isdigit() for g in groups if g):
                     y, m, d, h, mi = int(groups[0]), int(groups[1]), int(groups[2]), int(groups[3]), int(groups[4])
-                    y = y if y > 100 else datetime.now().year
+                    y = y if y > 100 else datetime.now(BEIJING_TZ).year
                     return f"{y:04d}-{m:02d}-{d:02d}T{h:02d}:{mi:02d}:00+08:00"
                 elif len(groups) == 4 and all(g.isdigit() for g in groups if g):
-                    now = datetime.now()
+                    now = datetime.now(BEIJING_TZ)
                     m, d, h, mi = int(groups[0]), int(groups[1]), int(groups[2]), int(groups[3])
                     y = now.year if m >= now.month else now.year + 1  # 跨年处理
                     return f"{y:04d}-{m:02d}-{d:02d}T{h:02d}:{mi:02d}:00+08:00"
                 elif len(groups) == 2:
-                    now = datetime.now()
+                    now = datetime.now(BEIJING_TZ)
                     m, d = int(groups[0]), int(groups[1])
                     y = now.year if m >= now.month else now.year + 1
                     return f"{y:04d}-{m:02d}-{d:02d}T00:00:00+08:00"
@@ -140,8 +152,38 @@ def extract_location(text: str) -> str:
         match = pattern.search(text)
         if match:
             location = match.group(1).strip().rstrip("。，,.;；")
-            if len(location) < 100:  # 过滤过长的匹配
+            if len(location) < 100:
                 return location
+    return ""
+
+
+def extract_contact(text: str) -> str:
+    """从文本中提取联系方式"""
+    if not text:
+        return ""
+    results = []
+    for pattern in CONTACT_PATTERNS:
+        for match in pattern.finditer(text):
+            val = match.group(1).strip()
+            if val and len(val) < 200:
+                prefix = match.group(0).split(":")[0].split("：")[0]
+                results.append(f"{prefix}: {val}")
+    return " | ".join(results[:3]) if results else ""
+
+
+def extract_end_time(text: str, start_time: str) -> str:
+    """从文本中提取结束时间，优先匹配时间范围格式"""
+    if not text or not start_time:
+        return ""
+    m = END_TIME_PATTERN.search(text)
+    if m:
+        try:
+            h, mi, eh, emi = int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4))
+            # 从 start_time 推断日期
+            dt = datetime.fromisoformat(start_time)
+            return f"{dt.year:04d}-{dt.month:02d}-{dt.day:02d}T{eh:02d}:{emi:02d}:00+08:00"
+        except (ValueError, TypeError):
+            pass
     return ""
 
 
@@ -151,13 +193,15 @@ def extract_activity_fallback(title: str, description: str) -> dict:
     当无法从正文提取时，使用标题和摘要
     """
     text = f"{title} {description}"
+    start_time = extract_time(text)
 
     return {
         "title": title,
         "description": (description.strip() or title).strip(),
         "location": extract_location(text),
-        "start_time": extract_time(text),
-        "end_time": "",
+        "contact": extract_contact(text),
+        "start_time": start_time,
+        "end_time": extract_end_time(text, start_time),
     }
 
 
@@ -178,7 +222,7 @@ def extract_activity(article: dict, club: dict) -> dict:
     extracted = extract_activity_fallback(title, desc_text.strip())
 
     activity = {
-        "id": f"act_{article.get('article_id', '')[:12]}" or f"act_{datetime.now().timestamp():.0f}",
+        "id": f"act_{article.get('article_id', '')[:12]}" or f"act_{datetime.now(BEIJING_TZ).timestamp():.0f}",
         "club_id": article.get("club_id", club.get("id", "")),
         "title": extracted["title"],
         "description": extracted["description"],
@@ -190,25 +234,27 @@ def extract_activity(article: dict, club: dict) -> dict:
         "article_id": article.get("article_id", ""),
         "cover_url": article.get("cover_url", ""),
         "publish_time": article.get("publish_time", ""),
-        "contact": "",
+        "contact": extracted["contact"],
         "source": "crawl",
         "status": compute_status(extracted["start_time"]),
-        "created_at": datetime.now().isoformat(),
+        "created_at": datetime.now(BEIJING_TZ).isoformat(),
     }
 
     return activity
 
 
+BEIJING_TZ = timezone(timedelta(hours=8))
+
+
 def compute_status(start_time: str) -> str:
-    """根据开始时间计算活动状态"""
+    """根据开始时间计算活动状态（北京时间 UTC+8）"""
     if not start_time:
         return "upcoming"
     try:
-        from datetime import timezone
         start = datetime.fromisoformat(start_time)
-        now = datetime.now().astimezone()
+        now = datetime.now(BEIJING_TZ)
         if start.tzinfo is None:
-            start = start.replace(tzinfo=timezone.utc)
+            start = start.replace(tzinfo=BEIJING_TZ)
         if start < now:
             return "ended"
         return "upcoming"
@@ -227,8 +273,7 @@ def normalize_article(article: dict) -> dict:
     # Unix 时间戳 → ISO 字符串
     create_ts = article.get("create_time", 0)
     if isinstance(create_ts, (int, float)) and create_ts > 1000000000:
-        from datetime import timezone
-        mapping["publish_time"] = datetime.fromtimestamp(create_ts, tz=timezone.utc).isoformat()
+        mapping["publish_time"] = datetime.fromtimestamp(create_ts, tz=BEIJING_TZ).isoformat()
     else:
         mapping["publish_time"] = article.get("publish_time", "")
 

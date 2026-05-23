@@ -14,7 +14,9 @@ import random
 import os
 import sys
 import re
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+
+BEIJING_TZ = timezone(timedelta(hours=8))
 
 import requests
 
@@ -195,7 +197,7 @@ def load_existing_article_ids() -> set:
 
 def main():
     print("=" * 60)
-    print(f"微信爬虫启动 | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"微信爬虫启动 | {datetime.now(BEIJING_TZ).strftime('%Y-%m-%d %H:%M:%S')} (北京时间)")
     print(f"API: cgi-bin/appmsgpublish")
     print("=" * 60)
 
@@ -205,7 +207,7 @@ def main():
         print("[!] 未配置 WECHAT_COOKIE 环境变量")
         print("   请在 GitHub Secrets 中设置 WECHAT_COOKIE")
         # 生成空输出
-        save_json(resolve_path(CONFIG["raw_output_path"]), {"articles": [], "crawled_at": datetime.now().isoformat()})
+        save_json(resolve_path(CONFIG["raw_output_path"]), {"articles": [], "crawled_at": datetime.now(BEIJING_TZ).isoformat()})
         return
 
     # 1. 登录并获取 token
@@ -213,7 +215,7 @@ def main():
     session, token = get_session_and_token(cookie)
     if not session or not token:
         print("[!] 登录失败")
-        save_json(resolve_path(CONFIG["raw_output_path"]), {"articles": [], "crawled_at": datetime.now().isoformat()})
+        save_json(resolve_path(CONFIG["raw_output_path"]), {"articles": [], "crawled_at": datetime.now(BEIJING_TZ).isoformat()})
         return
     print(f"      登录成功! token: {token}")
 
@@ -224,7 +226,7 @@ def main():
     print(f"      待爬取公众号: {len(clubs)} 个")
 
     if not clubs:
-        save_json(resolve_path(CONFIG["raw_output_path"]), {"articles": [], "crawled_at": datetime.now().isoformat()})
+        save_json(resolve_path(CONFIG["raw_output_path"]), {"articles": [], "crawled_at": datetime.now(BEIJING_TZ).isoformat()})
         return
 
     # 3. 加载已有文章 ID (增量)
@@ -286,7 +288,7 @@ def main():
     print("\n[5/5] 保存结果...")
     output = {
         "articles": all_new_articles,
-        "crawled_at": datetime.now().isoformat(),
+        "crawled_at": datetime.now(BEIJING_TZ).isoformat(),
         "stats": {
             "total_clubs": len(clubs),
             "total_crawled": total_crawled,

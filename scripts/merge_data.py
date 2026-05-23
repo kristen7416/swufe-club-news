@@ -13,7 +13,7 @@
 import json
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -36,10 +36,12 @@ def resolve(path):
     return os.path.join(PROJECT_ROOT, path)
 
 
+BEIJING_TZ = timezone(timedelta(hours=8))
+
+
 def compute_status(activity: dict) -> str:
-    """重新计算活动状态"""
-    from datetime import timezone
-    now = datetime.now().astimezone()  # offset-aware
+    """重新计算活动状态（北京时间 UTC+8）"""
+    now = datetime.now(BEIJING_TZ)
 
     start = activity.get("start_time")
     end = activity.get("end_time")
@@ -54,11 +56,10 @@ def compute_status(activity: dict) -> str:
     except (ValueError, TypeError):
         end_dt = None
 
-    # 统一为 offset-aware 以便比较
     if start_dt and start_dt.tzinfo is None:
-        start_dt = start_dt.replace(tzinfo=timezone.utc)
+        start_dt = start_dt.replace(tzinfo=BEIJING_TZ)
     if end_dt and end_dt.tzinfo is None:
-        end_dt = end_dt.replace(tzinfo=timezone.utc)
+        end_dt = end_dt.replace(tzinfo=BEIJING_TZ)
 
     if end_dt and end_dt < now:
         return "ended"
@@ -154,7 +155,7 @@ def main():
 
     output = {
         "activities": merged_list,
-        "last_updated": datetime.now().isoformat(),
+        "last_updated": datetime.now(BEIJING_TZ).isoformat(),
         "total_count": len(merged_list),
         "status_counts": status_counts,
     }

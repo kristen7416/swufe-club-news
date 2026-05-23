@@ -213,6 +213,34 @@
   overflow: hidden;
 }
 
+/* 卡片信息行 (时间/地点/联系方式) */
+.card-info-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--color, #4b5563);
+  line-height: 1.5;
+  margin-bottom: 0.25rem;
+}
+
+.info-icon {
+  flex-shrink: 0;
+  width: 1.2rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.contact-row {
+  background: #fefce8;
+  border: 1px solid #fde68a;
+  border-radius: 0.4rem;
+  padding: 0.2rem 0.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #92400e;
+}
+
 /* 卡片底部按钮 */
 .card-actions {
   display: flex;
