@@ -205,9 +205,10 @@ def compute_status(start_time: str) -> str:
         return "upcoming"
     try:
         from datetime import timezone
-        # 尝试解析带时区的 ISO 格式
         start = datetime.fromisoformat(start_time)
-        now = datetime.now().astimezone() if start.tzinfo else datetime.now()
+        now = datetime.now().astimezone()
+        if start.tzinfo is None:
+            start = start.replace(tzinfo=timezone.utc)
         if start < now:
             return "ended"
         return "upcoming"

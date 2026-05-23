@@ -39,7 +39,7 @@ def resolve(path):
 def compute_status(activity: dict) -> str:
     """重新计算活动状态"""
     from datetime import timezone
-    now = datetime.now()
+    now = datetime.now().astimezone()  # offset-aware
 
     start = activity.get("start_time")
     end = activity.get("end_time")
@@ -53,6 +53,12 @@ def compute_status(activity: dict) -> str:
         end_dt = datetime.fromisoformat(end) if end else None
     except (ValueError, TypeError):
         end_dt = None
+
+    # 统一为 offset-aware 以便比较
+    if start_dt and start_dt.tzinfo is None:
+        start_dt = start_dt.replace(tzinfo=timezone.utc)
+    if end_dt and end_dt.tzinfo is None:
+        end_dt = end_dt.replace(tzinfo=timezone.utc)
 
     if end_dt and end_dt < now:
         return "ended"
