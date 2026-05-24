@@ -1,0 +1,6 @@
+requests>=2.28
+beautifulsoup4>=4.12
+lxml>=5.0
+markdownify>=1.0
+httpx>=0.28
+camoufox[geoip]>=0.1

@@ -81,19 +81,24 @@ def compute_status(activity: dict) -> str:
     if end_dt and end_dt.tzinfo is None:
         end_dt = end_dt.replace(tzinfo=BEIJING_TZ)
 
-    # 年份合理性检查：如果 start_time 年份远超发布年份，说明年份推断错误（如"4月15日"被推断为2027年）
+    # 年份合理性检查：如果 start_time 年份 >= 发布年份且修正后在过去，说明推断错误
     pub_str = activity.get("publish_time", "")
     if start_dt and pub_str:
         try:
             pub_dt = datetime.fromisoformat(pub_str)
             if pub_dt.tzinfo is None:
                 pub_dt = pub_dt.replace(tzinfo=BEIJING_TZ)
-            # 开始年份比发布年份大1年以上 → 年份推断错误，清除让标题推断接管
-            if start_dt.year - pub_dt.year > 1:
-                start = None
-                end = None
-                start_dt = None
-                end_dt = None
+            if start_dt.year > pub_dt.year and start_dt > now and pub_dt < now:
+                # 尝试用发布年份修正，若结果在过去则说明推断错误
+                try:
+                    corrected = start_dt.replace(year=pub_dt.year)
+                except ValueError:
+                    corrected = None
+                if corrected and corrected < now:
+                    start = None
+                    end = None
+                    start_dt = None
+                    end_dt = None
         except (ValueError, TypeError):
             pass
 

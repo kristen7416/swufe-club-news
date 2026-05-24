@@ -358,3 +358,211 @@ compute_status(start_time, end_time)
 12. AI 模式测试：设置 `DEEPSEEK_API_KEY` + `mode=ai` 运行
 13. 全链路测试：crawl → extract (rule/ai) → merge → 前端验证
 14. 提交推送
+
+---
+
+## 6. 年份推断修复（gap=1 边界情况）
+
+### 6.1 问题现状
+
+当前仍有 **2 条活动**错误显示为"即将开始"：
+
+| 活动 | publish_time | start_time | 当前状态 |
+|------|-------------|------------|---------|
+| 破冰活动进度 Loading..... | 2025-11-10 | 2026-11-01 | upcoming ❌ |
+| 叮！你有一份不语奇妙夜邀请函等待查收 | 2025-12-06 | 2026-12-14 | upcoming ❌ |
+
+两个活动均为 2025 年 11-12 月发布，但活动时间被推断到 2026 年 11-12 月。发布半年后仍显示"即将开始"不合理——大概率是年份推断错误，活动实际发生在 2025 年 11-12 月。
+
+### 6.2 根因分析
+
+`extract_time()` 在提取无年份的时间时（如"11月1日"、"12月14日"），使用 `ref_time`（发布时间）的年份：
+
+```python
+y = ref_dt.year if m >= ref_dt.month else ref_dt.year + 1
+```
+
+- "破冰"：发布 2025-11-10，提取"11月1日"，m=11 ≥ pub_month=11 → y = 2025
+- 预期输出：`2025-11-01T00:00:00+08:00`
+- **实际数据**：`2026-11-01T00:00:00+08:00`
+
+说明**数据是在 `extract_time()` 修复之前就已写入** `activities.json`，当时用的是 `now.year` 逻辑（2026年5月，11月 ≥ 5 → 2026）。
+
+现有数据的年份已固话在 JSON 文件中，需要 `merge_data.py` 的 `compute_status()` 兜底修复。
+
+### 6.3 当前兜底逻辑的漏洞
+
+当前年份合理性检查条件为：
+
+```python
+if start_dt.year - pub_dt.year > 1:
+    start_dt = None  # 清除，让标题推断接管
+```
+
+对于 gap=1 的情况（2025→2026），`1 > 1` 为 False，检查不通过。
+
+### 6.4 修复方案
+
+将条件从 `> 1` 放宽为 `>= 1`，同时增加准确性保护——只有"纠正年份后开始时间会在过去"时才清除：
+
+```python
+if start_dt.year >= pub_dt.year and start_dt > now and pub_dt < now:
+    # 尝试将起始时间修正为发布年份
+    try:
+        corrected = start_dt.replace(year=pub_dt.year)
+        if corrected < now:
+            # 修正后在过去的，说明年份推断错误
+            start_dt = None
+            end_dt = None
+    except ValueError:
+        pass  # 闰年 2 月 29 日等边界情况
+```
+
+逻辑：
+1. `start_dt.year >= 1`：开始年份在发布年份之后（潜在错误）
+2. `start_dt > now`：开始时间在未来（才能是 upcoming）
+3. `pub_dt < now`：发布时间在过去（正常情况）
+4. `corrected < now`：如果改用发布年份，时间在过去（确认为错误）
+
+此方案能区分"提前一年预告的真实 upcoming"和"年份推断错误"。
+
+### 6.5 影响范围
+
+| 文件 | 改动 |
+|------|------|
+| `scripts/merge_data.py` | `compute_status()` 年份检查条件放宽 |
+| `scripts/extract_activity.py` | `compute_status()` 同位置同步修改 |
+| `site/data/activities.json` | 重新合并后状态自动修正（2 条 upcoming → ended） |
+
+---
+
+## 7. 微信公众号文章 → Markdown 集成方案
+
+### 7.1 背景与动机
+
+当前提取流程的瓶颈之一在于**文章正文抓取质量**：
+
+- 目前使用 `requests.get()` + User-Agent 伪造抓取正文（`fetch_article_text()`）
+- 经常触发微信反爬验证页（"js_verify"），正文获取失败
+- 使用正则 `extract_text_from_article_html()` 做 HTML→纯文本，丢失结构信息
+- 给 DeepSeek AI 的输入是纯文本，缺少段落/标题/列表结构，影响提取精度
+
+引入 **[wechat-article-to-markdown](https://github.com/jackwener/wechat-article-to-markdown)** 可以解决以上问题。
+
+### 7.2 工具简介
+
+该工具是一个开源 Python 项目（MIT 协议），核心能力：
+
+| 能力 | 当前方案 | 引入后 |
+|------|----------|--------|
+| 反检测 | User-Agent 模拟 | **Camoufox 浏览器引擎**（指纹随机化 + 反自动化检测） |
+| 正文提取 | 正则 `rich_media_content` 匹配 | **BeautifulSoup DOM 操作**，更稳定 |
+| 输出格式 | 纯文本（丢失结构） | **Markdown**（保留标题/列表/代码块层次） |
+| 图片处理 | 不下载 | 自动下载到本地并重写链接 |
+| 代码块 | 被剥离 | 保留语言标识的 fence 代码块 |
+| 发布时间 | 来自爬虫 API | 从 HTML JS 变量 `create_time` 提取（补充来源） |
+
+### 7.3 工作原理
+
+```
+URL → Camoufox (反检测浏览器) → 完整 HTML → BeautifulSoup 解析
+  → 提取元数据 (title, author, publish_time)
+  → 清洗 DOM (修复懒加载图片 / 提取代码块 / 移除噪声)
+  → markdownify 转换为 Markdown
+  → 下载图片到本地 → 输出 .md 文件
+```
+
+### 7.4 集成方案
+
+#### 选项 A：替换 fetch_article_text（推荐）
+
+将 `extract_activity.py` 中的 `fetch_article_text()` 替换为 wechat-article-to-markdown 的抓取逻辑。
+
+**优点：**
+- 改动局部化，只影响文章抓取环节
+- AI 提取获得结构化 Markdown 输入（更好理解段落关系）
+- 反检测能力大幅提升，减少抓取失败
+
+**改动点：**
+
+| 函数 | 改动 |
+|------|------|
+| `fetch_article_text()` | 改用 Camoufox 浏览器获取 HTML（替代 requests） |
+| `extract_text_from_article_html()` | 改用 markdownify + BeautifulSoup（替代正则剥离） |
+| `EXTRACT_ACTIVITY_FETCH_CONFIG` | 新增 Camoufox 配置（headless, timeout） |
+
+**流程变化：**
+
+```
+当前：URL → requests.get → HTML → 正则剥离 → 纯文本 → AI/规则提取
+引入：URL → Camoufox → HTML → markdownify → Markdown → AI/规则提取
+```
+
+**Docker/CI 注意事项：**
+- Camoufox 需要浏览器运行时，GitHub Actions Ubuntu 需安装系统依赖（playwright 依赖包）
+- 首次运行需下载 browser binary（~200MB），可通过缓存加速
+- 推荐使用 `camoufox[geoip]` 最小安装（不含 geoip 数据可减肥）
+
+#### 选项 B：独立预处理步骤
+
+新增 `scripts/convert_to_markdown.py`，作为 crawl → extract 之间的独立步骤：
+- 读取 `raw_articles.json`，对所有文章 URL 调用 wechat-article-to-markdown
+- 输出 Markdown 文件到 `site/data/articles_md/`
+
+**优点：**
+- 解耦，不修改现有 extract 逻辑
+- Markdown 可缓存，重复使用
+- 便于人工审查中间结果
+
+**缺点：**
+- 增加了流水线步骤和运行时间
+- 额外的磁盘 I/O
+
+### 7.5 关键细节
+
+#### 依赖管理
+
+```
+camoufox           # 反检测浏览器
+beautifulsoup4     # HTML 解析
+markdownify        # HTML → Markdown
+httpx              # 异步图片下载
+```
+
+添加到 `requirements.txt` 或使用 `uv` 管理。
+
+#### CI 环境配置
+
+GitHub Actions workflow 需添加：
+
+```yaml
+- name: Install Camoufox browser
+  run: |
+    python -m camoufox fetch
+```
+
+#### 成本
+
+- Camoufox 浏览器启动约 1-2 秒，每篇文章抓取约 3-5 秒（含图片下载）
+- 相比 current requests 方法（3-6 秒延迟），总时间相近但成功率更高
+- 需下载 browser binary（首次约 200MB），后续 pipeline 可利用缓存
+
+### 7.6 风险与缓解
+
+| 风险 | 缓解措施 |
+|------|----------|
+| Camoufox 浏览器 binary 过大 | CI 缓存 `~/.cache/camoufox` |
+| GitHub Actions 无头浏览器兼容性 | 使用 `ubuntu-latest` + `camoufox[geoip]` |
+| 抓取速度变慢 | 并发控制 + 超时配置，与现有 `FETCH_CONFIG` 对齐 |
+| 工具不再维护 | 项目有 400+ stars，活跃维护；即使停更也可 fork 自维护 |
+| 微信反爬升级 | Camoufox 支持指纹定制，可升级 browser 版本应对 |
+
+### 7.7 实施计划
+
+| 步骤 | 内容 | 工作量 |
+|------|------|--------|
+| 1 | 本地安装测试：`uv sync` 安装依赖，跑通 URL 抓取 | 30 min |
+| 2 | 集成到 `extract_activity.py`：替换 `fetch_article_text()` | 2 hr |
+| 3 | CI 配置：添加 Camoufox browser 下载步骤 | 30 min |
+| 4 | 全链路测试：crawl → md → AI extract → merge | 1 hr |
+| 5 | 提交推送，监控流水线日志 | 15 min |
