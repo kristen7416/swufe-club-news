@@ -55,7 +55,9 @@
       "description": "思想理论类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "光华青马研",
+      "biz": "MzI1Mzc5NDE3MA=="
     },
     {
       "id": "club_006",
@@ -64,7 +66,9 @@
       "description": "思想理论类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "光华读书社",
+      "biz": "MzIyNjQwMzA5Mw=="
     },
     {
       "id": "club_007",
@@ -73,7 +77,9 @@
       "description": "思想理论类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "廉洁文化社",
+      "biz": "MzIzNzM5Mjg1OA=="
     },
     {
       "id": "club_008",
@@ -82,7 +88,9 @@
       "description": "学术科研类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "财经数智科学",
+      "biz": "MzYzNDM1ODczMQ=="
     },
     {
       "id": "club_009",
@@ -154,7 +162,9 @@
       "description": "学术科研类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "金融分析协会",
+      "biz": "Mzg4Nzc1MTA2MQ=="
     },
     {
       "id": "club_017",
@@ -172,7 +182,9 @@
       "description": "学术科研类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "西财学业指导中心爱学团",
+      "biz": "Mzg2ODI0MDU4Mg=="
     },
     {
       "id": "club_019",
@@ -208,7 +220,10 @@
       "description": "学术科研类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "西财金投",
+      "wechat_id": "SWUFE-FIA",
+      "biz": "MzAxNjM5NDA5NA=="
     },
     {
       "id": "club_023",
@@ -235,7 +250,9 @@
       "description": "学术科研类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "SCA西财咨询俱乐部",
+      "biz": "MzkzNTI4OTI3NQ=="
     },
     {
       "id": "club_026",
@@ -244,7 +261,9 @@
       "description": "学术科研类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "SWUFE青研坊",
+      "biz": "MzI1NTQzNDM3Mw=="
     },
     {
       "id": "club_027",
@@ -271,7 +290,9 @@
       "description": "文学艺术类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "森林音乐社",
+      "biz": "MzUxOTk1NTI1MA=="
     },
     {
       "id": "club_030",
@@ -280,7 +301,9 @@
       "description": "文学艺术类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "以上手工社",
+      "biz": "MzkzOTUyODAwOQ=="
     },
     {
       "id": "club_031",
@@ -397,7 +420,9 @@
       "description": "文学艺术类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "与田动漫社",
+      "biz": "MzAxMTExNjA0Ng=="
     },
     {
       "id": "club_044",
@@ -478,7 +503,9 @@
       "description": "传统文化类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "西财子裳汉服社",
+      "biz": "MzI3ODUyMDM1MA=="
     },
     {
       "id": "club_053",
@@ -532,7 +559,9 @@
       "description": "体育健身类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "西财排协",
+      "biz": "MzU0NjM0Njg1MA=="
     },
     {
       "id": "club_059",
@@ -541,7 +570,9 @@
       "description": "体育健身类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "西财乒协",
+      "biz": "MzU3ODU3MzU2OQ=="
     },
     {
       "id": "club_060",
@@ -550,7 +581,9 @@
       "description": "体育健身类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "西财棋牌社",
+      "biz": "MzI0MjgwNDEzNQ=="
     },
     {
       "id": "club_061",
@@ -559,7 +592,9 @@
       "description": "体育健身类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "西财台球社",
+      "biz": "MzAwMTEyNzY0OQ=="
     },
     {
       "id": "club_062",
@@ -613,7 +648,9 @@
       "description": "体育健身类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "西南财大网联",
+      "biz": "MzAwNDEwMzY1NA=="
     },
     {
       "id": "club_068",
@@ -631,7 +668,9 @@
       "description": "体育健身类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "西财泳协",
+      "biz": "MzAxMzUwNjg3MA=="
     },
     {
       "id": "club_070",
@@ -721,7 +760,10 @@
       "description": "公益服务类社团",
       "avatar_url": "",
       "is_active": true,
-      "created_at": "2026-05-24"
+      "created_at": "2026-05-24",
+      "wechat_name": "朗目支教公益实践社团",
+      "wechat_id": "langmuzhijiao",
+      "biz": "MzAxMTA1NjMyMQ=="
     },
     {
       "id": "club_080",
@@ -859,5 +901,5 @@
       "created_at": "2026-05-24"
     }
   ],
-  "last_updated": "2026-05-24T17:30:00+08:00"
+  "last_updated": "2026-05-24T18:00:00+08:00"
 }
