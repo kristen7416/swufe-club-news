@@ -39,7 +39,7 @@ CONFIG = {
     "clubs_path": "site/data/clubs.json",
     "raw_path": "site/data/raw_articles.json",
     "output_path": "site/data/extracted_activities.json",
-    "mode": "rule",  # "rule" 或 "ai"
+    "mode": "ai",  # "rule" 或 "ai"
     "ai": {
         "api_key": os.environ.get("DEEPSEEK_API_KEY", ""),
         "model": os.environ.get("DEEPSEEK_MODEL", "deepseek-chat"),
