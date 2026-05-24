@@ -179,8 +179,8 @@ TIME_PATTERNS = [
 
 # 地点提取正则
 LOCATION_PATTERNS = [
-    re.compile(r"(?:地点|地址|位置|活动地点|会场)[：:]\s*(\S+)"),
-    re.compile(r"(?:在|于)\s*(\S+(?:楼|馆|厅|堂|中心|教室|操场|场|室|报告厅|会议室))"),
+    re.compile(r"(?:地点|地址|位置|活动地点|会场)[：:]\s*([^，。,\s；;]{2,12})"),
+    re.compile(r"(?:在|于)\s*([^，。,\s]{2,10}(?:楼|馆|厅|堂|中心|教室|室|广场|操场|场|报告厅))"),
 ]
 
 # 联系方式提取正则
@@ -368,15 +368,22 @@ def extract_time(text: str) -> str:
 
 
 def extract_location(text: str) -> str:
-    """从文本中提取地点"""
+    """从文本中提取地点，限制 10 字以内，去除噪音"""
     if not text:
         return ""
     for pattern in LOCATION_PATTERNS:
         match = pattern.search(text)
         if match:
-            location = match.group(1).strip().rstrip("。，,.;；")
-            if len(location) < 100:
-                return location
+            location = match.group(1).strip().rstrip("。，,.;；：:")
+            # 截断到 10 个字，去除明显噪音
+            location = location[:10]
+            # 过滤：不含地点特征词且长度短于 2 的舍弃
+            if len(location) < 2:
+                continue
+            # 过滤明显不是地点的文本
+            if any(kw in location for kw in ["时间", "电话", "QQ", "微信", "http", "邮箱"]):
+                continue
+            return location
     return ""
 
 

@@ -38,9 +38,28 @@ def resolve(path):
 
 BEIJING_TZ = timezone(timedelta(hours=8))
 
+# 标题关键词 → 状态推断（与 extract_activity.py 保持一致）
+STATUS_TITLE_HINTS = {
+    "ended": ["圆满结束", "精彩回顾", "活动总结", "回顾", "落幕",
+              "收官", "成功举办", "圆满落幕", "圆满结束"],
+    "upcoming": ["预告", "倒计时", "即将", "敬请期待",
+                 "抢鲜", "预热", "剧透", "通知"],
+}
+
+
+def infer_status_from_title(title: str) -> str:
+    """当 start_time/end_time 无法确定时，通过标题关键词推断活动状态"""
+    if not title:
+        return ""
+    for status, keywords in STATUS_TITLE_HINTS.items():
+        for kw in keywords:
+            if kw in title:
+                return status
+    return ""
+
 
 def compute_status(activity: dict) -> str:
-    """重新计算活动状态（北京时间 UTC+8）"""
+    """重新计算活动状态（北京时间 UTC+8），无时间时降级到标题推断"""
     now = datetime.now(BEIJING_TZ)
 
     start = activity.get("start_time")
@@ -69,6 +88,13 @@ def compute_status(activity: dict) -> str:
         return "ended"
     if start_dt and start_dt > now:
         return "upcoming"
+
+    # 无时间数据 → 标题关键词降级推断
+    if not start and not end:
+        title_status = infer_status_from_title(activity.get("title", ""))
+        if title_status:
+            return title_status
+
     return "upcoming"
 
 
@@ -114,6 +140,10 @@ def merge_activities(existing: list, extracted: list, manual: list) -> list:
         act["source"] = "manual"
         act["status"] = compute_status(act)
         merged[key] = act
+
+    # 4. 全局重算状态（确保已有活动也应用标题推断）
+    for key in merged:
+        merged[key]["status"] = compute_status(merged[key])
 
     # 转为列表，按时间倒序
     activities = list(merged.values())
