@@ -21,29 +21,15 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 设置 Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
       - name: 安装依赖
         run: |
-          pip install requests beautifulsoup4 lxml markdownify httpx camoufox[geoip]
-
-      - name: 下载 Camoufox 浏览器 (缓存加速)
-        uses: actions/cache@v4
-        id: camoufox-cache
-        with:
-          path: ~/.cache/camoufox
-          key: camoufox-${{ runner.os }}
-      - if: steps.camoufox-cache.outputs.cache-hit != 'true'
-        name: 初始化 Camoufox 浏览器
-        run: python -m camoufox fetch
+          pip install requests beautifulsoup4 lxml markdownify httpx
 
       - name: 运行爬虫
         env:
           WECHAT_COOKIE: ${{ secrets.WECHAT_COOKIE }}
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        shell: powershell
         run: |
           cd ${{ github.workspace }}
           python scripts/crawl_wechat.py
@@ -51,17 +37,20 @@ jobs:
           python scripts/merge_data.py
 
       - name: 提交数据更新
+        shell: powershell
         run: |
           git config user.name "swufe-bot"
           git config user.email "bot@swufe-club-news.github.io"
           git add site/data/
           # 检查是否有变更
-          if git diff --staged --quiet; then
+          $diff = git diff --staged --quiet
+          if ($LASTEXITCODE -eq 0) {
             echo "数据无变更，跳过提交"
-          else
-            git commit -m "auto: 更新活动数据 $(date +'%Y-%m-%d %H:%M' UTC)"
+          } else {
+            $date = Get-Date -Format "yyyy-MM-dd HH:mm"
+            git commit -m "auto: 更新活动数据 $date UTC"
             git push
-          fi
+          }
 
   deploy:
     needs: crawl
