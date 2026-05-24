@@ -153,24 +153,13 @@
       "digest": "",
       "copyright_stat": 0,
       "club_id": "club_022"
-    },
-    {
-      "aid": "2247492548_1",
-      "title": "重磅发布丨2026四川省大学生管理咨询挑战赛初赛结果",
-      "link": "https://mp.weixin.qq.com/s/_xp-khBZ-53X-pflnFJhuQ",
-      "cover": "https://mmbiz.qpic.cn/mmbiz_jpg/kbjIQPOVIDiaoPRuiakTUc0M1b1uO3AsCgQvZdtHG1HibRxa4G1CSZ2j7icrW2OXRhRZepficOF5nxXOAmK5V7GiaVsGibjSXYPzkiawhlCXzicaIhib0/0?wx_fmt=jpeg",
-      "create_time": 1778762948,
-      "update_time": 1778762948,
-      "digest": "",
-      "copyright_stat": 1,
-      "club_id": "club_025"
     }
   ],
-  "crawled_at": "2026-05-24T19:27:16.047243+08:00",
+  "crawled_at": "2026-05-24T20:53:40.707041+08:00",
   "stats": {
-    "total_clubs": 25,
-    "total_crawled": 38,
-    "new_articles": 15,
+    "total_clubs": 26,
+    "total_crawled": 37,
+    "new_articles": 14,
     "errors": 0
   }
 }
