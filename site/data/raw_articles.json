@@ -1,10 +1,286 @@
 {
-  "articles": [],
-  "crawled_at": "2026-05-24T17:25:30.168274+08:00",
+  "articles": [
+    {
+      "aid": "2247511494_1",
+      "title": "马克思主义学院召开党委理论中心组学习（扩大）会  深入学习习近平总书记关于推动哲学社会科学高质量发展重要指示精神",
+      "link": "https://mp.weixin.qq.com/s/rZFBW1EXx7kxpklHE3JfIg",
+      "cover": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/57xX6jGY6gpBIrUJWc5jFJiaTEBPCCOHSOiceC5f90SU6BJW0NfjXGHa7Cr5HPD1j5SZ1Cicib3coLia8baJicql2KmDr41Pb0gGsOxKlBGHU0Gco/0?wx_fmt=jpeg",
+      "create_time": 1779335411,
+      "update_time": 1779335411,
+      "digest": "",
+      "copyright_stat": 0,
+      "club_id": "club_005"
+    },
+    {
+      "aid": "2247511486_1",
+      "title": "“数智时代提升马克思主义意识形态话语权”学术研讨会在我校举行",
+      "link": "https://mp.weixin.qq.com/s/KRR---QarbNXBHbv0YJTDA",
+      "cover": "https://mmbiz.qpic.cn/mmbiz_jpg/57xX6jGY6gpqQpVyDtB7PvYsHBibMpIWaenyG8vIXdZqApGkKADZghaYRljYXAhBcibdHsXFN5gRCZSprXseqmTZZibn6segMowvEfhpicnGszg/0?wx_fmt=jpeg",
+      "create_time": 1779249972,
+      "update_time": 1779249972,
+      "digest": "",
+      "copyright_stat": 0,
+      "club_id": "club_005"
+    },
+    {
+      "aid": "2247511481_1",
+      "title": "马克思主义学院举办光华讲坛暨“光华经典读书会”2026年春季学期第四讲",
+      "link": "https://mp.weixin.qq.com/s/-DjrLUr3BBLGzFC-f9JpcQ",
+      "cover": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/57xX6jGY6gpbqd0F878MwI8ic1H1cWQHyykOicxpNtGI66XXwF8hFTZ7jrAP23sHBkwtibJbuMiaWCnGozRGDVZSibC6xn9IXlAhNTxbibo0qz1I8/0?wx_fmt=jpeg",
+      "create_time": 1779176400,
+      "update_time": 1779176400,
+      "digest": "",
+      "copyright_stat": 0,
+      "club_id": "club_005"
+    },
+    {
+      "aid": "2247511476_1",
+      "title": "预告 | 光华经典读书会：历史唯物主义的经典表述——《政治经济学批判序言》解读",
+      "link": "https://mp.weixin.qq.com/s/Hc4zO7oXWnVLuIRcBhA3bQ",
+      "cover": "https://mmbiz.qpic.cn/mmbiz_jpg/57xX6jGY6goI9OrTCS1RV6qSj2WXaibEsWAUr46Er0XZ3robgDvEc7iana9XxeRBxYGppJokuSk0eymTicxAIpeVM3ecE8vOSF57k8NBMGnv2E/0?wx_fmt=jpeg",
+      "create_time": 1779164208,
+      "update_time": 1779164207,
+      "digest": "",
+      "copyright_stat": 0,
+      "club_id": "club_005"
+    },
+    {
+      "aid": "2247511434_1",
+      "title": "我院与川陕革命根据地博物馆签署合作协议 共建革命文物协同研究中心与“大思政课”实践教学基地",
+      "link": "https://mp.weixin.qq.com/s/ZU0erjgvxl-iML0yRJWoTg",
+      "cover": "https://mmbiz.qpic.cn/mmbiz_jpg/57xX6jGY6golqHEWaV0Kzc2WEC395ETdpXkz805p9NbbcicfeHAJ9tkCmXtXkxDlWJ3gDKlEMUPd2ef3vruVibx8UtKjTHsqu2mhoVDqicGjrk/0?wx_fmt=jpeg",
+      "create_time": 1779025636,
+      "update_time": 1779025636,
+      "digest": "",
+      "copyright_stat": 0,
+      "club_id": "club_005"
+    },
+    {
+      "aid": "2247523490_1",
+      "title": "教务处举行2026版本科专业人才培养方案答辩会",
+      "link": "https://mp.weixin.qq.com/s/JlsV8Br9V1hYHRYVP0nSVA",
+      "cover": "https://mmbiz.qpic.cn/mmbiz_jpg/giaHouCicD4RAlOmNDyllcUsREUicDWicNnjR0oGrfbqs8iaJqzJDm6wv0ZGiaOG3A4vWLV9sg3M9d9PgrWIbpSG0icQ2k0pKseFLc565uEQialjuibE/0?wx_fmt=jpeg",
+      "create_time": 1779368424,
+      "update_time": 1779409800,
+      "digest": "",
+      "copyright_stat": 0,
+      "club_id": "club_006"
+    },
+    {
+      "aid": "2247523489_1",
+      "title": "关于举办西南财经大学2026年本科生学术论文大赛的通知",
+      "link": "https://mp.weixin.qq.com/s/-47cJ_yQ8eolGHzg_1eJtQ",
+      "cover": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/giaHouCicD4RBrm1qRuiaKCrPrqGdL8AwEDVl9ic5qVAGUkZPvF7icVT05TcLWxiciaLxXWjqdME30UAwzfmiaibiaYCfjicJI3mBn2ANIUKHpDBZf9gcI/0?wx_fmt=jpeg",
+      "create_time": 1779363370,
+      "update_time": 1779363369,
+      "digest": "",
+      "copyright_stat": 0,
+      "club_id": "club_006"
+    },
+    {
+      "aid": "2247487441_1",
+      "title": "纪法百科丨组织处理包括哪些方式？",
+      "link": "https://mp.weixin.qq.com/s/5G59Jleb-BV26TJr-RLrUA",
+      "cover": "https://mmbiz.qpic.cn/mmbiz_jpg/CGWHiaZOf7FzTyS0dc3I52gAwEevTcC9lWLiaOXTic7S7v6xBjYqCc454g7elL05uibg3ibxTSlktlHVA3q4GuE7zb0PozUg5eaE7MU7BibZZy6uc/0?wx_fmt=jpeg",
+      "create_time": 1779421511,
+      "update_time": 1779421511,
+      "digest": "组织处理是指党组织对违规违纪违法、失职失责失范的领导干部采取的岗位、职务、职级调整措施，包括停职检查、调整职务、责令辞职、免职、降职。",
+      "copyright_stat": 0,
+      "club_id": "club_007"
+    },
+    {
+      "aid": "2247487435_1",
+      "title": "学有所悟丨树牢正确政绩观 走好从政“第一步”",
+      "link": "https://mp.weixin.qq.com/s/R3ThMm6tsdMwjQayI_vt0A",
+      "cover": "https://mmbiz.qpic.cn/mmbiz_jpg/CGWHiaZOf7FyEiakXMnzb7JJNFPFWiaZPB8mOnfNibGeR1ULmydwg78bzLNvxMGTjznAJ3Ecv8lhicevqg7diaEVe3Cx8hQpNgywnhUFicjEmOFQqk/0?wx_fmt=jpeg",
+      "create_time": 1779334648,
+      "update_time": 1779334648,
+      "digest": "纪检监察机关年轻干部要积极投身学习教育，自觉按照“四个过硬”的要求加强自身建设，以正确政绩观走好从政“第一步”",
+      "copyright_stat": 0,
+      "club_id": "club_007"
+    },
+    {
+      "aid": "2247487435_2",
+      "title": "三堂会审丨套取公款用于公务开支和个人开支如何定性",
+      "link": "https://mp.weixin.qq.com/s/-MmorwH1ADiJdFtkI9QS-A",
+      "cover": "https://mmbiz.qpic.cn/mmbiz_jpg/CGWHiaZOf7FxeFJE5hUagkHZEvicdLRmQ36sSvhXbjmn2NgHrxqIR3AlOesXnElibo3qsLz1sl7CJxGicdoHNgrYSiazShzcU4ISyD5cFAkpu96Q/0?wx_fmt=jpeg",
+      "create_time": 1779334648,
+      "update_time": 1779334648,
+      "digest": "",
+      "copyright_stat": 0,
+      "club_id": "club_007"
+    },
+    {
+      "aid": "2247487428_1",
+      "title": "纪法百科丨公职人员包括哪些人员？",
+      "link": "https://mp.weixin.qq.com/s/YOGP5rY44D-i9LJWVgIivQ",
+      "cover": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/CGWHiaZOf7FxLt46yF7GEldVyCjiaqGO8amTGm9ibPibIkZlHiaCwnH22v2uWFMMhTgozBpcecQODGlafuDTScJrviaUCs0Y1CRo9d36KDlhfiaEfY/0?wx_fmt=jpeg",
+      "create_time": 1779152095,
+      "update_time": 1779152094,
+      "digest": "公职人员，是指《中华人民共和国监察法》第十五条规定的人员。",
+      "copyright_stat": 0,
+      "club_id": "club_007"
+    },
+    {
+      "aid": "2247487428_2",
+      "title": "学习词典•树立和践行正确政绩观丨知行合一",
+      "link": "https://mp.weixin.qq.com/s/NxFjl2ONZCBU1tAJZzgOzQ",
+      "cover": "https://mmbiz.qpic.cn/mmbiz_jpg/CGWHiaZOf7Fw76hL86d2VBFrYLo0eJBdspJkIJ3KA5Xznx5cYEeh0n8JLUszlhZLcKkjKoA7lew42xbCE88mJuCiaXeJsicIutEk9c8SicfEmnQ/0?wx_fmt=jpeg",
+      "create_time": 1779152095,
+      "update_time": 1779152094,
+      "digest": "树立和践行正确政绩观，既需要理论上的坚定，也需要行动上的自觉。",
+      "copyright_stat": 0,
+      "club_id": "club_007"
+    },
+    {
+      "aid": "2247487414_1",
+      "title": "学习词典·树立和践行正确政绩观丨把抓好党建作为最大的政绩",
+      "link": "https://mp.weixin.qq.com/s/L-iyqYu8DWQZm4PjG3OdzA",
+      "cover": "https://mmbiz.qpic.cn/mmbiz_jpg/CGWHiaZOf7Fw6ZiaEicES1xELfsENib4zibWqmdbFeKHHGz1Sia1zfy6EZtk78XBcqakkr4ib5qGE5bSmZEiaddeXntHISWR6QVyeSK5pnHZqxjONGc/0?wx_fmt=jpeg",
+      "create_time": 1778807770,
+      "update_time": 1778807770,
+      "digest": "要把抓好党建作为最大的政绩！",
+      "copyright_stat": 0,
+      "club_id": "club_007"
+    },
+    {
+      "aid": "2247487414_2",
+      "title": "时代专论丨完善政绩考核评价体系，用好考核指挥棒",
+      "link": "https://mp.weixin.qq.com/s/VGB3sKbexl_ghcqdOIGawQ",
+      "cover": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/CGWHiaZOf7FyztAZmM2niapoFqZAYD6ZyJQRGFdbDezI0VRxwuMyB0TC1fCs49BYtcYCC1TLNoILEhAyM0KZuYDF3icyKABgC7C55P4KPjToB8/0?wx_fmt=jpeg",
+      "create_time": 1778807770,
+      "update_time": 1778807770,
+      "digest": "考核评价是引导干部树立和践行正确政绩观的指挥棒，其科学性、精准性直接影响着政绩导向的正确性。",
+      "copyright_stat": 0,
+      "club_id": "club_007"
+    },
+    {
+      "aid": "2247490213_1",
+      "title": "2025-2026-2学期第13周教师预约咨询",
+      "link": "https://mp.weixin.qq.com/s/oVtmTQlBei52-1cuFMs-AQ",
+      "cover": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/zIibKbtBTibxgt4libGq8wG0d03VFfPc78ibFOoCwezWp9miavpRdxxicFE3iaG178uyMv93bXTC82E7rzBRUDSgzBX0vlEFK7Nia3ksSBBRyC13SAk/0?wx_fmt=jpeg",
+      "create_time": 1779353107,
+      "update_time": 1779353107,
+      "digest": "第十三周教师咨询预约-学业指导中心-     学生学业指导中心第13周咨询教师安排新鲜出炉啦，欢迎同学们查看教",
+      "copyright_stat": 0,
+      "club_id": "club_018"
+    },
+    {
+      "aid": "2247490122_1",
+      "title": "2025-2026-2学期第12周教师预约咨询",
+      "link": "https://mp.weixin.qq.com/s/TWF-4HtvGToELkY1cmkfvw",
+      "cover": "https://mmbiz.qpic.cn/mmbiz_jpg/zIibKbtBTibxiayFq8uHgsOQXNyeQX0sdRrzeu48Jrib4qaev6xMmxuv6MN0Ow09GvRB9HdjH5Qc4GIC3EVAib90F261Op6vc4Enxvpricg7c2PTs/0?wx_fmt=jpeg",
+      "create_time": 1778809155,
+      "update_time": 1778809155,
+      "digest": "第十二周教师咨询预约-学生学业指导中心-    学生学业指导中心第12周咨询教师安排新鲜出炉啦，欢迎同学们查看",
+      "copyright_stat": 0,
+      "club_id": "club_018"
+    },
+    {
+      "aid": "2650005426_1",
+      "title": "【Activity·FIA】洞察市场 智胜千里|CFA全球分析大赛校内选拔赛即将启幕",
+      "link": "https://mp.weixin.qq.com/s/1MxqFEagOuuNdrDMS0--wg",
+      "cover": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/rAbssNyKNjR6qWCw6PWh5QZlKzLhibsUmZNibNicnEaMMDNLqUlQfv5jUTNYHgkE0dwDhPpPkUFLzcNV6sVlgEg3Y68gibqh9N6m8dTCp97uvbE/0?wx_fmt=jpeg",
+      "create_time": 1779186429,
+      "update_time": 1779186428,
+      "digest": "校内选拔赛CFA Research ChallengeCFA全球分析大赛赛事合作方介绍CFA协会（Charte",
+      "copyright_stat": 0,
+      "club_id": "club_022"
+    },
+    {
+      "aid": "2650005408_1",
+      "title": "【FIA】一图读懂2026“上证杯”赛制",
+      "link": "https://mp.weixin.qq.com/s/QB5bUKnoo1UeaNHLhXj4vA",
+      "cover": "https://mmbiz.qpic.cn/mmbiz_jpg/rAbssNyKNjQb7Zia1EP9BSf9qQTQLBtNdcIYZb5MWIcQuqrEK5biaOy1JEaccHnOianS6xoesicysDSMemdNymo98sLuo9E4rWykZzEjgqqrAnc/0?wx_fmt=jpeg",
+      "create_time": 1778774672,
+      "update_time": 1778810400,
+      "digest": "",
+      "copyright_stat": 0,
+      "club_id": "club_022"
+    },
+    {
+      "aid": "2247492574_1",
+      "title": "决赛预告丨2026四川省大学生管理咨询挑战赛决赛",
+      "link": "https://mp.weixin.qq.com/s/yLaJbwVs741tZUWtdjSvEw",
+      "cover": "https://mmbiz.qpic.cn/mmbiz_jpg/kbjIQPOVIDhz4icWffyLU5VdHzNGibSKMkKHsKc6H4MibKYWQ5tfO1wITfjzBUKJGq1duicxEOQ1NoEaQrJmKWWMcp69p2CpEd6ibsMbhk2miaSL8/0?wx_fmt=jpeg",
+      "create_time": 1779507900,
+      "update_time": 1779507900,
+      "digest": "",
+      "copyright_stat": 1,
+      "club_id": "club_025"
+    },
+    {
+      "aid": "2247492574_2",
+      "title": "议程发布丨2026四川省大学生管理咨询挑战赛决赛暨AI青年创新论坛",
+      "link": "https://mp.weixin.qq.com/s/-uWLN3itXJu_eQteH6tLSQ",
+      "cover": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/kbjIQPOVIDiayIKawgNkiaLPia60VXjMXV81oNbQZyJjPeeNrYOiaRH6S47icQO0aN1K90vVt0IeLdEndVAwyAp7p36Lia2ZY3WLcgKjPwZeakTIw/0?wx_fmt=jpeg",
+      "create_time": 1779507900,
+      "update_time": 1779507900,
+      "digest": "",
+      "copyright_stat": 0,
+      "club_id": "club_025"
+    },
+    {
+      "aid": "2247492574_3",
+      "title": "论坛预告丨“智汇·同行”交流空间：校友面对面+简历精修+名企HR答疑",
+      "link": "https://mp.weixin.qq.com/s/pmczROxt9YKQ0hEo85bCqw",
+      "cover": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/kbjIQPOVIDiaSXIHFpwX1ia9ticzzDLS3qfCUHZubGdjJRkSYibtp1S7cW1x5k1H2ic9CLNq2qUo6rdB3YG2jeLnmictVVyibjYKPicDACdHJ6TSnibk/0?wx_fmt=jpeg",
+      "create_time": 1779507900,
+      "update_time": 1779507900,
+      "digest": "",
+      "copyright_stat": 0,
+      "club_id": "club_025"
+    },
+    {
+      "aid": "2247492559_1",
+      "title": "企业参访回顾丨决赛队伍走进陶乐科技",
+      "link": "https://mp.weixin.qq.com/s/QRHYcnTic8qzRgNm0tAMxQ",
+      "cover": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/kbjIQPOVIDh2rTRtm5rXXdGN0YpMDw3ibia1WPibeWbiblbWO5XFo0VkvGj0dfmh6m6SRu6QdmP5JehoHT4W8mEnwtmEmVzNzl5g1YEjqv1ZDto/0?wx_fmt=jpeg",
+      "create_time": 1779353764,
+      "update_time": 1779353764,
+      "digest": "",
+      "copyright_stat": 1,
+      "club_id": "club_025"
+    },
+    {
+      "aid": "2247492553_1",
+      "title": "企业参访预告丨探秘游戏社交新赛道，智启咨询实战新征程",
+      "link": "https://mp.weixin.qq.com/s/-QvsVNZbu9xkJHs-VW4nRQ",
+      "cover": "https://mmbiz.qpic.cn/mmbiz_jpg/kbjIQPOVIDjYkAlBdjnXbLWMnTkyENZlUuiabvsW3ZUO7ppkcoTgg8fX6PGLkvskYVzRmTcSsibuHysm3VibPceHAjtLQiaabqMiaboXXPCVFbeU/0?wx_fmt=jpeg",
+      "create_time": 1778854065,
+      "update_time": 1778854064,
+      "digest": "",
+      "copyright_stat": 1,
+      "club_id": "club_025"
+    },
+    {
+      "aid": "2247492548_1",
+      "title": "重磅发布丨2026四川省大学生管理咨询挑战赛初赛结果",
+      "link": "https://mp.weixin.qq.com/s/_xp-khBZ-53X-pflnFJhuQ",
+      "cover": "https://mmbiz.qpic.cn/mmbiz_jpg/kbjIQPOVIDiaoPRuiakTUc0M1b1uO3AsCgQvZdtHG1HibRxa4G1CSZ2j7icrW2OXRhRZepficOF5nxXOAmK5V7GiaVsGibjSXYPzkiawhlCXzicaIhib0/0?wx_fmt=jpeg",
+      "create_time": 1778762948,
+      "update_time": 1778762948,
+      "digest": "",
+      "copyright_stat": 1,
+      "club_id": "club_025"
+    },
+    {
+      "aid": "2247484712_1",
+      "title": "活动回顾｜一布一染，邂逅童真！手工社走进西南财经大学附属幼儿园",
+      "link": "https://mp.weixin.qq.com/s/tqDdJquHYXXlF_3X9Leumw",
+      "cover": "https://mmbiz.qpic.cn/mmbiz_jpg/MxL1Quhx37BQ7cvafibSArwrGFZctDNdgbqXWCYhKG8EE1CU4pGGuONHnNAx1PLC9sibeDkL7ia7qdNQjMo06hoMia9A0ArVGvaDDicqgXWibvno8/0?wx_fmt=jpeg",
+      "create_time": 1779428520,
+      "update_time": 1779428519,
+      "digest": "",
+      "copyright_stat": 0,
+      "club_id": "club_030"
+    }
+  ],
+  "crawled_at": "2026-05-24T17:50:11.169238+08:00",
   "stats": {
-    "total_clubs": 4,
-    "total_crawled": 0,
-    "new_articles": 0,
+    "total_clubs": 24,
+    "total_crawled": 25,
+    "new_articles": 25,
     "errors": 0
   }
 }
