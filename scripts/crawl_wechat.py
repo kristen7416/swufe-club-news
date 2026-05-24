@@ -197,6 +197,16 @@ def crawl_club_articles(session, token: str, biz: str, max_count: int = 20) -> l
     return all_articles
 
 
+def match_club_by_title(title: str, club_names_sorted: list, club_name_map: dict) -> str:
+    """根据文章标题匹配社团名称，返回 club_id。未匹配返回空字符串"""
+    if not title:
+        return ""
+    for cname in club_names_sorted:
+        if cname in title:
+            return club_name_map[cname]
+    return ""
+
+
 def load_existing_article_ids() -> set:
     """加载已存在的文章 ID 集合"""
     data = load_json(resolve_path(CONFIG["activities_path"]), {})
@@ -230,8 +240,26 @@ def main():
     # 2. 加载社团列表
     print("\n[2/5] 加载社团列表...")
     clubs_data = load_json(resolve_path(CONFIG["clubs_path"]), {})
-    clubs = [c for c in clubs_data.get("clubs", []) if c.get("biz") and c.get("is_active") is not False]
-    print(f"      待爬取公众号: {len(clubs)} 个")
+    all_clubs = clubs_data.get("clubs", [])
+    clubs = [c for c in all_clubs if c.get("biz") and c.get("is_active") is not False]
+    print(f"      待爬取公众号: {len(clubs)} 个 (含聚合账号)")
+
+    # 构建社团名称 → club_id 映射（用于聚合账号的文章匹配）
+    club_name_map = {}
+    for c in all_clubs:
+        name = c.get("name", "")
+        if name:
+            club_name_map[name] = c.get("id", "")
+        # 公众号名称也作为匹配键
+        wname = c.get("wechat_name", "")
+        if wname and wname != name:
+            club_name_map[wname] = c.get("id", "")
+        # 短名称（去掉"西南财经大学"前缀）
+        short = name.replace("西南财经大学", "").replace("swufe", "").replace("SWUFE", "").strip()
+        if short and short not in club_name_map:
+            club_name_map[short] = c.get("id", "")
+    # 按名称长度降序排序，优先匹配最长名称
+    club_names_sorted = sorted(club_name_map.keys(), key=len, reverse=True)
 
     if not clubs:
         save_json(resolve_path(CONFIG["raw_output_path"]), {"articles": [], "crawled_at": datetime.now(BEIJING_TZ).isoformat()})
@@ -260,8 +288,10 @@ def main():
             name = club.get("name", "未知")
             biz = club["biz"]
             club_id = club.get("id", "?")
+            is_aggregator = club.get("is_aggregator", False)
 
-            print(f"  [{club_id}] {name} (biz: {biz[:16]}...)")
+            if is_aggregator:
+                print(f"  [{club_id}] {name} (聚合账号, 将按标题匹配社团)")
 
             try:
                 articles = crawl_club_articles(session, token, biz, CONFIG["max_articles_per_club"])
@@ -272,12 +302,23 @@ def main():
                 for a in articles:
                     url_key = a["link"]
                     if url_key not in existing_ids:
-                        a["club_id"] = club_id
+                        # 聚合账号：按标题匹配到具体社团
+                        if is_aggregator:
+                            matched_id = match_club_by_title(a.get("title", ""), club_names_sorted, club_name_map)
+                            if matched_id:
+                                a["club_id"] = matched_id
+                            else:
+                                continue  # 未匹配到任何社团则跳过
+                        else:
+                            a["club_id"] = club_id
                         all_new_articles.append(a)
                         existing_ids.add(url_key)
                         new_count += 1
 
-                print(f"    -> 获取 {len(articles)} 篇, 新 {new_count} 篇")
+                if is_aggregator:
+                    print(f"    -> 获取 {len(articles)} 篇, 匹配到 {new_count} 篇")
+                else:
+                    print(f"    -> 获取 {len(articles)} 篇, 新 {new_count} 篇")
 
             except Exception as e:
                 total_errors += 1

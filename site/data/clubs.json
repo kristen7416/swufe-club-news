@@ -899,7 +899,19 @@
       "avatar_url": "",
       "is_active": true,
       "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_095",
+      "name": "青春西财",
+      "wechat_name": "青春西财",
+      "biz": "MjM5MzE3OTA2OA==",
+      "category": "其他",
+      "description": "西南财经大学团委官方公众号（聚合账号，覆盖全校社团活动报道）",
+      "avatar_url": "",
+      "is_active": true,
+      "is_aggregator": true,
+      "created_at": "2026-05-24"
     }
   ],
-  "last_updated": "2026-05-24T18:00:00+08:00"
+  "last_updated": "2026-05-24T18:30:00+08:00"
 }
