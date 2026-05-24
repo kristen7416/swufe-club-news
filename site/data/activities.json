@@ -1,42 +1,6 @@
 {
   "activities": [
     {
-      "id": "act_2247484946_1",
-      "club_id": "club_003",
-      "title": "破冰活动进度 Loading.....",
-      "description": "破\n\n冰\n\n活\n\n动\n\nLoading ……\n\n破冰进度 ……\n\n11月1日，秋日午后，阳光正好。数学建模社团的破冰活动在欢声笑语中拉开帷幕。来自学研部、宣联部、行政部的新老成员齐聚一堂，开启了一场别开生面的见面会。\n\n破冰伊始： 甜蜜开场\n\n活动从一份小小的甜蜜开始。精致的蛋糕不仅满足了味蕾，更瞬间拉近了彼此的距离。大家一边享用美食，一边交流互动，初见的拘谨在香甜的空气里渐渐融化。\n\n游戏时光：",
-      "category": "学术科技",
-      "location": "欢声笑语中拉开帷幕。来自学研部、宣联部、行政部的新老成员齐聚一堂，开启了一场",
-      "start_time": "2026-11-01T00:00:00+08:00",
-      "end_time": "",
-      "article_url": "https://mp.weixin.qq.com/s/71SD9LuCopOFQhtJlFf9CQ",
-      "article_id": "2247484946_1",
-      "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/JEkT7nDtaoWr5tMSocxQuACp6Jukxy2oKVtd5L5u0mJcorFRomj9KrDzO1cN4HNM172YPzhgHZOnNenW2hUf7w/0?wx_fmt=jpeg",
-      "publish_time": "2025-11-10T13:22:52+00:00",
-      "contact": "",
-      "source": "crawl",
-      "status": "upcoming",
-      "created_at": "2026-05-23T19:16:38.400057"
-    },
-    {
-      "id": "act_2247484178_1",
-      "club_id": "club_001",
-      "title": "叮！你有一份不语奇妙夜邀请函等待查收",
-      "description": "叮！你有一份\n不语奇妙夜邀请函\n等待查收\n\n同道相会 与你不语\n\n岁月不居，时节如流。又一年的寒冬里，不语配音社的年度晚会拉开了帷幕。因“语”结缘的我们相约在这个午后，一起来演绎声音的魅力，给这段同行的岁月留下不语的颜色。相逢一处，共庆佳时。在12月14日下午14:00，颐德楼H102，不语配音社的年度晚会正静候着大家的到来。\n\n不语的共享家园里会增添许多惊艳这段岁月的瞬间，我们每个人的回忆里也会",
-      "category": "文化艺术",
-      "location": "这个午后，一起来演绎声音的魅力，给这段同行的岁月留下不语的颜色。相逢一处，共庆佳时。在12月14日下午14:00，颐德楼",
-      "start_time": "2026-12-14T00:00:00+08:00",
-      "end_time": "",
-      "article_url": "https://mp.weixin.qq.com/s/wmeBdrizOPPuMbwwJkLU5A",
-      "article_id": "2247484178_1",
-      "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/uok1eh8kQSxiar5ibWiaNuLlgxsHUUIpoQVKlH7PNWNf5iabQq95eeWK90uibeckicNUnl8GETBzEXdlcfC96CoRwkMw/0?wx_fmt=jpeg",
-      "publish_time": "2025-12-06T13:23:32+00:00",
-      "contact": "",
-      "source": "crawl",
-      "status": "upcoming",
-      "created_at": "2026-05-23T18:52:35.183246"
-    },
-    {
       "id": "act_2247484008_1",
       "club_id": "club_001",
       "title": "​​​​夜宣预告｜声影交汇,不语X融创邀你共赴秋夜之约！",
@@ -559,6 +523,42 @@
       "created_at": "2026-05-23T19:16:38.399960"
     },
     {
+      "id": "act_2247484946_1",
+      "club_id": "club_003",
+      "title": "破冰活动进度 Loading.....",
+      "description": "破\n\n冰\n\n活\n\n动\n\nLoading ……\n\n破冰进度 ……\n\n11月1日，秋日午后，阳光正好。数学建模社团的破冰活动在欢声笑语中拉开帷幕。来自学研部、宣联部、行政部的新老成员齐聚一堂，开启了一场别开生面的见面会。\n\n破冰伊始： 甜蜜开场\n\n活动从一份小小的甜蜜开始。精致的蛋糕不仅满足了味蕾，更瞬间拉近了彼此的距离。大家一边享用美食，一边交流互动，初见的拘谨在香甜的空气里渐渐融化。\n\n游戏时光：",
+      "category": "学术科技",
+      "location": "欢声笑语中拉开帷幕。来自学研部、宣联部、行政部的新老成员齐聚一堂，开启了一场",
+      "start_time": "2026-11-01T00:00:00+08:00",
+      "end_time": "",
+      "article_url": "https://mp.weixin.qq.com/s/71SD9LuCopOFQhtJlFf9CQ",
+      "article_id": "2247484946_1",
+      "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/JEkT7nDtaoWr5tMSocxQuACp6Jukxy2oKVtd5L5u0mJcorFRomj9KrDzO1cN4HNM172YPzhgHZOnNenW2hUf7w/0?wx_fmt=jpeg",
+      "publish_time": "2025-11-10T13:22:52+00:00",
+      "contact": "",
+      "source": "crawl",
+      "status": "ended",
+      "created_at": "2026-05-23T19:16:38.400057"
+    },
+    {
+      "id": "act_2247484178_1",
+      "club_id": "club_001",
+      "title": "叮！你有一份不语奇妙夜邀请函等待查收",
+      "description": "叮！你有一份\n不语奇妙夜邀请函\n等待查收\n\n同道相会 与你不语\n\n岁月不居，时节如流。又一年的寒冬里，不语配音社的年度晚会拉开了帷幕。因“语”结缘的我们相约在这个午后，一起来演绎声音的魅力，给这段同行的岁月留下不语的颜色。相逢一处，共庆佳时。在12月14日下午14:00，颐德楼H102，不语配音社的年度晚会正静候着大家的到来。\n\n不语的共享家园里会增添许多惊艳这段岁月的瞬间，我们每个人的回忆里也会",
+      "category": "文化艺术",
+      "location": "这个午后，一起来演绎声音的魅力，给这段同行的岁月留下不语的颜色。相逢一处，共庆佳时。在12月14日下午14:00，颐德楼",
+      "start_time": "2026-12-14T00:00:00+08:00",
+      "end_time": "",
+      "article_url": "https://mp.weixin.qq.com/s/wmeBdrizOPPuMbwwJkLU5A",
+      "article_id": "2247484178_1",
+      "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/uok1eh8kQSxiar5ibWiaNuLlgxsHUUIpoQVKlH7PNWNf5iabQq95eeWK90uibeckicNUnl8GETBzEXdlcfC96CoRwkMw/0?wx_fmt=jpeg",
+      "publish_time": "2025-12-06T13:23:32+00:00",
+      "contact": "",
+      "source": "crawl",
+      "status": "ended",
+      "created_at": "2026-05-23T18:52:35.183246"
+    },
+    {
       "id": "act_2652441925_1",
       "club_id": "club_002",
       "title": "\"羽\"你同行 | 精品课程第一课纪实",
@@ -883,11 +883,11 @@
       "created_at": "2026-05-23T19:16:38.400004"
     }
   ],
-  "last_updated": "2026-05-24T16:06:44.566296+08:00",
+  "last_updated": "2026-05-24T16:32:51.928311+08:00",
   "total_count": 49,
   "status_counts": {
-    "upcoming": 2,
+    "upcoming": 0,
     "ongoing": 0,
-    "ended": 47
+    "ended": 49
   }
 }

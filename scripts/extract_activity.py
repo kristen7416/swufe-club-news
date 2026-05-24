@@ -14,6 +14,7 @@ import re
 import sys
 import time
 import random
+import asyncio
 import html as html_mod
 from datetime import datetime, timedelta, timezone
 
@@ -22,6 +23,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import requests
 
 from utils import load_json, save_json
+from wechat_to_md import fetch_markdown
 
 
 def safe_print(*args, **kwargs):
@@ -64,6 +66,7 @@ def resolve(path):
 
 FETCH_CONFIG = {
     "enabled": True,
+    "method": "auto",  # "auto" (先 Camoufox 后 requests), "requests", "camoufox"
     "delay_min": 3,
     "delay_max": 6,
     "timeout": 15,
@@ -103,11 +106,40 @@ def extract_text_from_article_html(html_text: str) -> str:
     return ""
 
 
-def fetch_article_text(url: str) -> str:
-    """抓取微信文章 HTML 并提取正文文本"""
+def fetch_article_markdown(url: str) -> str:
+    """使用 Camoufox 反检测浏览器 + Markdownify 获取文章 Markdown 文本"""
     if not url or "mp.weixin.qq.com" not in url:
         return ""
 
+    try:
+        result = asyncio.run(fetch_markdown(url))
+        if result:
+            print(f"    [抓取-Camoufox] 获取 Markdown {len(result)} 字符")
+        else:
+            print(f"    [抓取-Camoufox] 未能提取内容")
+        return result
+    except Exception as e:
+        print(f"    [抓取-Camoufox] 异常: {e}")
+        return ""
+
+
+def fetch_article_text(url: str) -> str:
+    """抓取微信文章 HTML 并提取正文文本，支持 Camoufox + requests 双引擎"""
+    if not url or "mp.weixin.qq.com" not in url:
+        return ""
+
+    # Camoufox 模式：直接使用浏览器引擎
+    if FETCH_CONFIG["method"] == "camoufox":
+        return fetch_article_markdown(url)
+
+    # "auto" 模式：先试 Camoufox，失败则降级 requests
+    if FETCH_CONFIG["method"] == "auto":
+        md_text = fetch_article_markdown(url)
+        if md_text:
+            return md_text
+        print(f"    [抓取] Camoufox 失败，降级到 requests")
+
+    # requests 模式（默认/降级）
     for attempt in range(FETCH_CONFIG["max_retries"] + 1):
         try:
             r = requests.get(url, headers=FETCH_HEADERS, timeout=FETCH_CONFIG["timeout"])
@@ -555,14 +587,19 @@ def compute_status(start_time: str, end_time: str = "", publish_time: str = "") 
     if end_dt and end_dt.tzinfo is None:
         end_dt = end_dt.replace(tzinfo=BEIJING_TZ)
 
-    # 年份合理性检查：如果 start_time 年份远超发布年份，说明年份推断错误
+    # 年份合理性检查：如果 start_time 年份 > 发布年份且修正后在过去，说明推断错误
     if start_dt and publish_time:
         try:
             pub_dt = datetime.fromisoformat(publish_time)
             if pub_dt.tzinfo is None:
                 pub_dt = pub_dt.replace(tzinfo=BEIJING_TZ)
-            if start_dt.year - pub_dt.year > 1:
-                start_dt = None
+            if start_dt.year > pub_dt.year and start_dt > now and pub_dt < now:
+                try:
+                    corrected = start_dt.replace(year=pub_dt.year)
+                except ValueError:
+                    corrected = None
+                if corrected and corrected < now:
+                    start_dt = None
         except (ValueError, TypeError):
             pass
 
