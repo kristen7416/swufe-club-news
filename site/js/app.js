@@ -29,11 +29,12 @@
     DOM.categoryNav = document.getElementById('categoryNav');
     DOM.statusTabs = document.getElementById('statusTabs');
     DOM.loadMore = document.getElementById('loadMore');
-    DOM.loadMoreBtn = DOM.loadMore?.querySelector('button');
-    DOM.dialog = document.getElementById('activityDialog');
+    DOM.loadMoreBtn = DOM.loadMore?.querySelector('.load-more-btn');
+    DOM.dialogOverlay = document.getElementById('activityDialog');
     DOM.dialogTitle = document.getElementById('dialogTitle');
     DOM.dialogBody = document.getElementById('dialogBody');
-    DOM.closeBtn = document.getElementById('closeDialog');
+    DOM.dialogFooter = document.getElementById('dialogFooter');
+    DOM.dialogClose = document.getElementById('closeDialog');
     DOM.lastUpdated = document.getElementById('lastUpdated');
   }
 
@@ -99,6 +100,18 @@
     return map[status] || status || '';
   }
 
+  function highlightCategory(category) {
+    DOM.categoryNav?.querySelectorAll('.category-btn').forEach(el => {
+      el.classList.toggle('active', el.dataset.category === category);
+    });
+  }
+
+  function highlightStatus(status) {
+    DOM.statusTabs?.querySelectorAll('.status-btn').forEach(el => {
+      el.classList.toggle('active', el.dataset.status === status);
+    });
+  }
+
   // ===== 数据加载 =====
 
   async function loadData() {
@@ -118,7 +131,6 @@
 
       STATE.activities = actResp.activities || [];
 
-      // 构建社团 Map
       const clubsMap = {};
       for (const club of (clubResp.clubs || [])) {
         if (club.is_active !== false) {
@@ -127,26 +139,25 @@
       }
       STATE.clubs = clubsMap;
 
-      // 更新时间戳
       if (actResp.last_updated && DOM.lastUpdated) {
         DOM.lastUpdated.textContent = formatTime(actResp.last_updated);
       }
-
     } catch (err) {
       console.error('数据加载失败:', err);
       DOM.loading.style.display = 'none';
       DOM.grid.innerHTML = `
         <div class="empty-state">
-          <p>😕 数据加载失败</p>
+          <div class="empty-icon">📭</div>
+          <h3>数据加载失败</h3>
           <p>请刷新页面重试</p>
-          <button onclick="location.reload()" class="secondary" style="margin-top:1rem">刷新</button>
+          <button onclick="location.reload()" style="margin-top:16px;padding:8px 24px;border-radius:8px;background:var(--swufe-blue);color:white;border:none;font-size:14px;font-weight:600;cursor:pointer">刷新</button>
         </div>`;
       return;
     }
 
     DOM.loading.style.display = 'none';
 
-    // 读取 URL 参数
+    // URL 参数
     const params = new URLSearchParams(location.search);
     if (params.get('category')) {
       const cat = params.get('category');
@@ -163,7 +174,6 @@
     render();
     bindEvents();
 
-    // 如果有 ?id=，打开对应详情
     if (params.get('id')) {
       const act = STATE.activities.find(a => a.id === params.get('id'));
       if (act) openDialog(act);
@@ -176,17 +186,14 @@
     const { category, search, status } = STATE.filters;
     let result = [...STATE.activities];
 
-    // 分类筛选
     if (category !== 'all') {
       result = result.filter(a => a.category === category);
     }
 
-    // 状态筛选
     if (status !== 'all') {
       result = result.filter(a => a.status === status);
     }
 
-    // 搜索
     if (search.trim()) {
       const q = search.trim().toLowerCase();
       result = result.filter(a => {
@@ -197,7 +204,7 @@
       });
     }
 
-    // 排序：进行中 > 即将开始 > 已结束，同状态下按开始时间升序
+    // 排序：进行中 > 即将开始 > 已结束
     result.sort((a, b) => {
       const order = { ongoing: 0, upcoming: 1, ended: 2 };
       const diff = (order[a.status] || 99) - (order[b.status] || 99);
@@ -208,7 +215,7 @@
     STATE.filtered = result;
     STATE.displayCount = 20;
 
-    // 更新 URL
+    // URL 更新
     const params = new URLSearchParams();
     if (category !== 'all') params.set('category', category);
     if (search) params.set('search', search);
@@ -216,18 +223,6 @@
       ? `${location.pathname}?${params}`
       : location.pathname;
     history.replaceState(null, '', newUrl);
-  }
-
-  function highlightCategory(category) {
-    DOM.categoryNav?.querySelectorAll('a').forEach(el => {
-      el.classList.toggle('active', el.dataset.category === category);
-    });
-  }
-
-  function highlightStatus(status) {
-    DOM.statusTabs?.querySelectorAll('[data-status]').forEach(el => {
-      el.classList.toggle('active', el.dataset.status === status);
-    });
   }
 
   // ===== 渲染 =====
@@ -238,7 +233,8 @@
     if (toShow.length === 0) {
       DOM.grid.innerHTML = `
         <div class="empty-state">
-          <p>😕 没有找到匹配的活动</p>
+          <div class="empty-icon">🔍</div>
+          <h3>没有找到匹配的活动</h3>
           <p>试试其他筛选条件</p>
         </div>`;
       DOM.loadMore.style.display = 'none';
@@ -249,55 +245,56 @@
       const club = STATE.clubs[act.club_id] || {};
       const clubName = club.name || '未知社团';
       const statusText = getStatusText(act.status);
-
       const timeStr = formatTimeRange(act.start_time, act.end_time);
-      const dateStr = formatDate(act.start_time);
 
       return `
         <article class="activity-card" data-id="${act.id}">
-          <span class="status-badge status-${act.status}">${statusText}</span>
-          <h3 class="card-title">${escapeHtml(act.title)}</h3>
-          <div class="card-meta">
-            <span>🏛 ${escapeHtml(clubName)}</span>
+          <div class="card-header">
+            <span class="status-badge status-${act.status}">${statusText}</span>
+            <span class="card-club">
+              <span class="club-dot">${clubName.charAt(0)}</span>
+              ${escapeHtml(clubName)}
+            </span>
           </div>
-          ${timeStr ? `<div class="card-info-row"><span class="info-icon">🗓</span><span>${timeStr}</span></div>` : ''}
-          ${act.location ? `<div class="card-info-row"><span class="info-icon">📍</span><span>${escapeHtml(act.location)}</span></div>` : ''}
-          ${act.contact ? `<div class="card-info-row contact-row"><span class="info-icon">💬</span><span>${escapeHtml(act.contact)}</span></div>` : ''}
+          <h3 class="card-title">${escapeHtml(act.title)}</h3>
           ${act.description ? `<p class="card-desc">${escapeHtml(truncate(act.description, 80))}</p>` : ''}
-          <div class="card-actions">
-            ${act.article_url ? `<a href="${act.article_url}" target="_blank" rel="noopener" class="outline" onclick="event.stopPropagation()">📄 原文</a>` : '<span></span>'}
-            <button class="detail-btn secondary" data-id="${act.id}" onclick="event.stopPropagation()">详情 →</button>
+          <div class="card-info">
+            ${timeStr ? `<div class="card-info-row"><span class="info-icon">🗓</span><span>${timeStr}</span></div>` : ''}
+            ${act.location ? `<div class="card-info-row"><span class="info-icon">📍</span><span>${escapeHtml(act.location)}</span></div>` : ''}
+            ${act.contact ? `<div class="card-info-row contact-row"><span class="info-icon">💬</span><span>${escapeHtml(act.contact)}</span></div>` : ''}
+          </div>
+          <div class="card-footer">
+            ${act.article_url ? `<a href="${act.article_url}" target="_blank" rel="noopener" class="source-link">📄 原文</a>` : '<span></span>'}
+            <button class="detail-btn" data-id="${act.id}">详情 →</button>
           </div>
         </article>
       `;
     }).join('');
 
-    // 控制"加载更多"
     DOM.loadMore.style.display = STATE.displayCount >= STATE.filtered.length ? 'none' : 'block';
   }
 
   // ===== 事件绑定 =====
 
   function bindEvents() {
-    // 分类点击 (事件委托)
+    // 分类点击
     DOM.categoryNav?.addEventListener('click', (e) => {
-      const link = e.target.closest('a[data-category]');
-      if (!link) return;
-      e.preventDefault();
-      DOM.categoryNav.querySelectorAll('a').forEach(el => el.classList.remove('active'));
-      link.classList.add('active');
-      STATE.filters.category = link.dataset.category;
+      const btn = e.target.closest('.category-btn');
+      if (!btn) return;
+      DOM.categoryNav.querySelectorAll('.category-btn').forEach(el => el.classList.remove('active'));
+      btn.classList.add('active');
+      STATE.filters.category = btn.dataset.category;
       applyFilters();
       render();
     });
 
-    // 状态筛选 (事件委托)
+    // 状态筛选
     DOM.statusTabs?.addEventListener('click', (e) => {
-      const span = e.target.closest('[data-status]');
-      if (!span) return;
-      DOM.statusTabs.querySelectorAll('[data-status]').forEach(el => el.classList.remove('active'));
-      span.classList.add('active');
-      STATE.filters.status = span.dataset.status;
+      const btn = e.target.closest('.status-btn');
+      if (!btn) return;
+      DOM.statusTabs.querySelectorAll('.status-btn').forEach(el => el.classList.remove('active'));
+      btn.classList.add('active');
+      STATE.filters.status = btn.dataset.status;
       applyFilters();
       render();
     });
@@ -319,9 +316,8 @@
       render();
     });
 
-    // 点击卡片打开详情 (事件委托)
+    // 点击卡片打开详情 (排除链接和按钮)
     DOM.grid?.addEventListener('click', (e) => {
-      // 如果点击的是链接或按钮，不处理
       if (e.target.closest('a') || e.target.closest('button')) return;
       const card = e.target.closest('.activity-card');
       if (card) {
@@ -331,7 +327,7 @@
       }
     });
 
-    // 详情按钮点击
+    // 详情按钮
     DOM.grid?.addEventListener('click', (e) => {
       const btn = e.target.closest('.detail-btn');
       if (!btn) return;
@@ -340,13 +336,18 @@
       if (act) openDialog(act);
     });
 
-    // 关闭弹窗
-    DOM.closeBtn?.addEventListener('click', closeDialog);
-    DOM.dialog?.addEventListener('click', (e) => {
+    // 弹窗关闭
+    DOM.dialogClose?.addEventListener('click', closeDialog);
+    DOM.dialogOverlay?.addEventListener('click', (e) => {
       if (e.target === e.currentTarget) closeDialog();
     });
+    // 弹窗底部按钮 (事件委托)
+    DOM.dialogFooter?.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-secondary');
+      if (btn) closeDialog();
+    });
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && DOM.dialog?.hasAttribute('open')) closeDialog();
+      if (e.key === 'Escape' && DOM.dialogOverlay?.classList.contains('open')) closeDialog();
     });
   }
 
@@ -356,69 +357,113 @@
     const club = STATE.clubs[activity.club_id] || {};
     const clubName = club.name || '未知社团';
     const statusText = getStatusText(activity.status);
+    const timeStr = formatTimeRange(activity.start_time, activity.end_time);
 
     DOM.dialogTitle.textContent = activity.title;
 
-    const timeStr = formatTimeRange(activity.start_time, activity.end_time);
-
     DOM.dialogBody.innerHTML = `
-      <p><span class="status-badge status-${activity.status}">${statusText}</span></p>
-      <p><strong>${escapeHtml(clubName)}</strong>${activity.category ? ' · ' + activity.category : ''}</p>
+      <div class="dialog-club-info">
+        <span class="status-badge status-${activity.status}">${statusText}</span>
+        <span>${escapeHtml(clubName)}${activity.category ? ' · ' + activity.category : ''}</span>
+      </div>
 
       ${timeStr ? `
+        <hr class="dialog-divider">
         <p class="dialog-section-title">⏰ 时间</p>
-        <p>${timeStr}</p>
+        <p class="dialog-value">${timeStr}</p>
       ` : ''}
 
       ${activity.location ? `
+        <hr class="dialog-divider">
         <p class="dialog-section-title">📍 地点</p>
-        <p>${escapeHtml(activity.location)}</p>
+        <p class="dialog-value">${escapeHtml(activity.location)}</p>
       ` : ''}
 
       ${activity.contact ? `
+        <hr class="dialog-divider">
         <p class="dialog-section-title">💬 参与方式</p>
-        <p>${escapeHtml(activity.contact)}</p>
+        <p class="dialog-value">${escapeHtml(activity.contact)}</p>
       ` : ''}
 
       ${activity.description ? `
-        <hr>
+        <hr class="dialog-divider">
         <p class="dialog-section-title">📝 活动介绍</p>
-        <p>${escapeHtml(activity.description)}</p>
+        <p class="dialog-value">${escapeHtml(activity.description)}</p>
       ` : ''}
 
       ${activity.cover_url ? `
-        <hr>
+        <hr class="dialog-divider">
         <p class="dialog-section-title">🖼 活动海报</p>
-        <p><img src="${escapeHtml(activity.cover_url)}" alt="活动海报" style="max-width:100%;border-radius:0.5rem;" loading="lazy"></p>
+        <img src="${escapeHtml(activity.cover_url)}" alt="活动海报" loading="lazy">
       ` : ''}
-
-      <hr>
-      <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
-        ${activity.article_url ? `<a href="${activity.article_url}" target="_blank" rel="noopener" class="contrast">📄 查看公众号原文</a>` : ''}
-        <button class="secondary" onclick="document.getElementById('closeDialog').click()">关闭</button>
-      </div>
     `;
 
-    DOM.dialog.showModal();
+    DOM.dialogFooter.innerHTML = `
+      ${activity.article_url ? `<a href="${activity.article_url}" target="_blank" rel="noopener" class="btn-primary">📄 查看原文</a>` : ''}
+      <button class="btn-secondary">关闭</button>
+    `;
 
-    // 更新 URL
+    DOM.dialogOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
     const url = new URL(location);
     url.searchParams.set('id', activity.id);
     history.replaceState(null, '', url);
   }
 
   function closeDialog() {
-    DOM.dialog.close();
+    DOM.dialogOverlay.classList.remove('open');
+    document.body.style.overflow = '';
 
     const url = new URL(location);
     url.searchParams.delete('id');
     history.replaceState(null, '', url);
   }
 
+  // ===== 顶部区域折叠 (25% → 15%) =====
+
+  function initCollapse() {
+    const topSection = document.getElementById('topSection');
+    const cardsSection = document.getElementById('cardsSection');
+    if (!topSection || !cardsSection) return;
+
+    const threshold = 30;
+    let compact = false;
+
+    cardsSection.addEventListener('scroll', () => {
+      const should = cardsSection.scrollTop > threshold;
+      if (should !== compact) {
+        compact = should;
+        topSection.classList.toggle('compact', compact);
+      }
+    });
+
+    // 滚到底部时展开
+    cardsSection.addEventListener('scroll', () => {
+      const { scrollTop, scrollHeight, clientHeight } = cardsSection;
+      if (scrollTop + clientHeight >= scrollHeight - 10 && compact) {
+        compact = false;
+        topSection.classList.remove('compact');
+      }
+    });
+  }
+
+  // ===== 字体加载 =====
+
+  function loadFonts() {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap';
+    link.onload = () => document.documentElement.classList.add('fonts-loaded');
+    document.head.appendChild(link);
+  }
+
   // ===== 启动 =====
 
   document.addEventListener('DOMContentLoaded', () => {
     cacheDom();
+    loadFonts();
+    initCollapse();
     loadData();
   });
 
