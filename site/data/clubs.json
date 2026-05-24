@@ -317,8 +317,10 @@
     {
       "id": "club_032",
       "name": "SDA舞蹈协会",
+      "wechat_name": "西财舞协",
+      "biz": "MzI5MTM5OTkzMA==",
       "category": "文化艺术",
-      "description": "文学艺术类社团",
+      "description": "西南财经大学SDA舞蹈协会，综合性舞蹈社团",
       "avatar_url": "",
       "is_active": true,
       "created_at": "2026-05-24"
@@ -913,5 +915,5 @@
       "created_at": "2026-05-24"
     }
   ],
-  "last_updated": "2026-05-24T18:30:00+08:00"
+  "last_updated": "2026-05-24T22:30:00+08:00"
 }
