@@ -5,11 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SWUFE 社团活动</title>
   <meta name="description" content="西南财经大学社团活动资讯聚合平台 - 一站式查看全校社团活动">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/picocss/2.0.6/pico.min.css" id="pico-css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
   <link rel="preload" href="data/activities.json" as="fetch" crossorigin="anonymous">
   <link rel="preload" href="data/clubs.json" as="fetch" crossorigin="anonymous">
+  <!-- CDN 降级：bootcdn 加载失败时切换到 jsdelivr -->
+  <script>
+    (function() {
+      var link = document.getElementById('pico-css');
+      if (link) {
+        var img = new Image();
+        img.onerror = function() {
+          link.href = 'https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css';
+        };
+        img.src = 'https://cdn.bootcdn.net/ajax/libs/picocss/2.0.6/pico.min.css?' + Date.now();
+        setTimeout(function() { img.src = ''; }, 3000);
+      }
+    })();
+  </script>
 </head>
 <body>
   <!-- 顶部导航 -->
@@ -75,6 +89,12 @@
       <div id="dialogBody"></div>
     </article>
   </dialog>
+
+  <!-- dialog-polyfill: QQ浏览器等旧版浏览器兼容 -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.js"></script>
+  <script>
+    try { dialogPolyfill.registerDialog(document.getElementById('activityDialog')); } catch(e) {}
+  </script>
 
   <!-- 底部 -->
   <footer class="app-footer">

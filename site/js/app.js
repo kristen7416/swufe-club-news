@@ -399,7 +399,7 @@
       </div>
     `;
 
-    DOM.dialog.setAttribute('open', '');
+    DOM.dialog.showModal();
 
     // 更新 URL
     const url = new URL(location);
@@ -408,7 +408,7 @@
   }
 
   function closeDialog() {
-    DOM.dialog.removeAttribute('open');
+    DOM.dialog.close();
 
     const url = new URL(location);
     url.searchParams.delete('id');
