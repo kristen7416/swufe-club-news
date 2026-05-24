@@ -81,10 +81,31 @@ def compute_status(activity: dict) -> str:
     if end_dt and end_dt.tzinfo is None:
         end_dt = end_dt.replace(tzinfo=BEIJING_TZ)
 
+    # 年份合理性检查：如果 start_time 年份远超发布年份，说明年份推断错误（如"4月15日"被推断为2027年）
+    pub_str = activity.get("publish_time", "")
+    if start_dt and pub_str:
+        try:
+            pub_dt = datetime.fromisoformat(pub_str)
+            if pub_dt.tzinfo is None:
+                pub_dt = pub_dt.replace(tzinfo=BEIJING_TZ)
+            # 开始年份比发布年份大1年以上 → 年份推断错误，清除让标题推断接管
+            if start_dt.year - pub_dt.year > 1:
+                start = None
+                end = None
+                start_dt = None
+                end_dt = None
+        except (ValueError, TypeError):
+            pass
+
     if end_dt and end_dt < now:
         return "ended"
     if start_dt and start_dt <= now:
         if not end_dt or end_dt > now:
+            if end_dt:
+                return "ongoing"  # 结束时间在未来
+            # 无结束时间：开始时间超过7天前 → 已结束（而非进行中）
+            if (now - start_dt).days > 7:
+                return "ended"
             return "ongoing"
         return "ended"
     if start_dt and start_dt > now:
@@ -104,11 +125,25 @@ def compute_status(activity: dict) -> str:
         except (ValueError, TypeError):
             pass
 
-    # 无时间数据 → 标题关键词降级推断
-    if not start and not end:
+    # 无有效时间数据 → 降级推断
+    if not start_dt and not end_dt:
+        # 1. 标题关键词推断（仅接受 "ended"，不信任 "upcoming" 标题推断）
         title_status = infer_status_from_title(activity.get("title", ""))
-        if title_status:
-            return title_status
+        if title_status == "ended":
+            return "ended"
+
+        # 2. 发布时间 > 30天 → 已结束（年份推断被清除 / 时间未提取到的旧活动）
+        if activity.get("publish_time"):
+            try:
+                pub_dt = datetime.fromisoformat(activity.get("publish_time"))
+                if pub_dt.tzinfo is None:
+                    pub_dt = pub_dt.replace(tzinfo=BEIJING_TZ)
+                if (now - pub_dt).days > 30:
+                    return "ended"
+            except (ValueError, TypeError):
+                pass
+
+        return "upcoming"
 
     return "upcoming"
 
