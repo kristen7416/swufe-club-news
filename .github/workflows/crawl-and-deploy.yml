@@ -53,9 +53,8 @@ jobs:
           }
 
   deploy:
-    needs: crawl
     runs-on: ubuntu-latest
-    if: always()  # 即使爬虫部分失败也尝试部署
+    if: ${{ !cancelled() }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
