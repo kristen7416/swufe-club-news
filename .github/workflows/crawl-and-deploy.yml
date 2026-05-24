@@ -33,6 +33,7 @@ jobs:
       - name: 运行爬虫
         env:
           WECHAT_COOKIE: ${{ secrets.WECHAT_COOKIE }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         run: |
           cd ${{ github.workspace }}
           python scripts/crawl_wechat.py

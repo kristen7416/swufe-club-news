@@ -40,6 +40,15 @@ CONFIG = {
     "raw_path": "site/data/raw_articles.json",
     "output_path": "site/data/extracted_activities.json",
     "mode": "rule",  # "rule" 或 "ai"
+    "ai": {
+        "api_key": os.environ.get("DEEPSEEK_API_KEY", ""),
+        "model": os.environ.get("DEEPSEEK_MODEL", "deepseek-chat"),
+        "endpoint": "https://api.deepseek.com/chat/completions",
+        "timeout": 30,
+        "max_text_length": 3000,
+        "retry_count": 1,
+        "retry_delay": 3,
+    },
 }
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -187,6 +196,119 @@ CONTACT_PATTERNS = [
 END_TIME_PATTERN = re.compile(r"(\d{1,2})[:：](\d{2})\s*[—\-～~至到]\s*(\d{1,2})[:：](\d{2})")
 
 
+# ===== DeepSeek AI 提取 =====
+
+DEEPSEEK_SYSTEM_PROMPT = """你是一个专门从中文社团活动推文中提取结构化信息的助手。
+请从给定的文章文本中提取活动信息，严格按照 JSON 格式返回。
+
+提取规则：
+1. title: 活动标题，清理多余空格和特殊字符，保持简洁
+2. description: 活动描述，50-200字摘要
+3. location: 活动地点，如明确提及则提取，否则为空字符串
+4. start_time: 开始时间，ISO 8601 格式 YYYY-MM-DDTHH:MM:SS+08:00，使用北京时间
+5. end_time: 结束时间，ISO 8601 格式 YYYY-MM-DDTHH:MM:SS+08:00，使用北京时间
+6. contact: 联系方式（QQ群、微信群、电话、邮箱等），如 "QQ群: 123456" 或 "微信: abc123"
+7. status: 活动状态，从文本推断："upcoming"（即将开始）, "ongoing"（进行中）, "ended"（已结束）
+8. category: 活动分类，从以下选择：学术科技, 文化艺术, 体育竞技, 志愿服务, 创新创业, 其他
+
+注意：
+- 如果某字段无法从文本中提取，设为空字符串
+- 时间必须使用北京时间时区 +08:00
+- status 优先从文本中的时间描述推断，而非文章发布时间
+- 只返回 JSON 对象，不要包含其他文字说明"""
+
+DEEPSEEK_USER_PROMPT_TEMPLATE = """请从以下社团活动文章中提取结构化信息：
+
+标题：{title}
+
+文章正文：
+{text}
+
+请返回 JSON 对象，包含：title, description, location, start_time, end_time, contact, status, category"""
+
+
+def extract_with_deepseek(title: str, text: str) -> dict:
+    """调用 DeepSeek API 从文章文本中提取结构化活动信息
+
+    Args:
+        title: 文章标题
+        text: 文章正文文本（将被截断至 max_text_length）
+
+    Returns:
+        dict: 结构化活动信息，API 失败时返回空 dict
+    """
+    api_key = CONFIG["ai"]["api_key"]
+    if not api_key:
+        print("    [DeepSeek] 未配置 API key，跳过 AI 提取")
+        return {}
+
+    truncated = text[:CONFIG["ai"]["max_text_length"]]
+
+    payload = {
+        "model": CONFIG["ai"]["model"],
+        "messages": [
+            {"role": "system", "content": DEEPSEEK_SYSTEM_PROMPT},
+            {"role": "user", "content": DEEPSEEK_USER_PROMPT_TEMPLATE.format(
+                title=title, text=truncated
+            )},
+        ],
+        "temperature": 0.1,
+        "max_tokens": 1024,
+        "response_format": {"type": "json_object"},
+    }
+
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+    }
+
+    for attempt in range(CONFIG["ai"]["retry_count"] + 1):
+        try:
+            resp = requests.post(
+                CONFIG["ai"]["endpoint"],
+                json=payload,
+                headers=headers,
+                timeout=CONFIG["ai"]["timeout"],
+            )
+            if resp.status_code != 200:
+                print(f"    [DeepSeek] HTTP {resp.status_code}: {resp.text[:200]}")
+                if attempt < CONFIG["ai"]["retry_count"]:
+                    time.sleep(CONFIG["ai"]["retry_delay"])
+                    continue
+                return {}
+
+            data = resp.json()
+            content = data.get("choices", [{}])[0].get("message", {}).get("content", "")
+            if not content:
+                print("    [DeepSeek] 响应为空")
+                return {}
+
+            result = json.loads(content)
+            validated = {}
+            for field in ["title", "description", "location", "start_time",
+                          "end_time", "contact", "status", "category"]:
+                val = result.get(field, "")
+                validated[field] = str(val).strip() if val else ""
+
+            print(f"    [DeepSeek] 提取成功: {validated.get('title', '')[:30]}")
+            return validated
+
+        except requests.Timeout:
+            print(f"    [DeepSeek] 请求超时")
+            if attempt < CONFIG["ai"]["retry_count"]:
+                time.sleep(CONFIG["ai"]["retry_delay"])
+                continue
+            return {}
+        except requests.RequestException as e:
+            print(f"    [DeepSeek] 请求异常: {e}")
+            return {}
+        except (json.JSONDecodeError, KeyError, IndexError) as e:
+            print(f"    [DeepSeek] 响应解析失败: {e}")
+            return {}
+
+    return {}
+
+
 def is_activity_article(title: str) -> bool:
     """基于标题关键词判断是否为活动类文章"""
     if not title:
@@ -288,12 +410,33 @@ def extract_end_time(text: str, start_time: str) -> str:
     return ""
 
 
-def extract_activity_fallback(title: str, description: str) -> dict:
+def extract_activity_fallback(title: str, description: str, article_body: str = "") -> dict:
     """
     从文章的标题和描述中提取活动信息
-    当无法从正文提取时，使用标题和摘要
+    支持 rule 和 ai 两种模式，AI 失败时自动降级到规则模式
     """
     text = f"{title} {description}"
+
+    # ---- AI 模式 ----
+    if CONFIG["mode"] == "ai":
+        print(f"    [提取] AI 模式")
+        ai_body = article_body or text
+        ai_result = extract_with_deepseek(title, ai_body)
+        if ai_result:
+            # 用规则提取器补齐 AI 缺失的关键字段
+            if not ai_result.get("location"):
+                ai_result["location"] = extract_location(text)
+            if not ai_result.get("contact"):
+                ai_result["contact"] = extract_contact(text)
+            if not ai_result.get("start_time"):
+                ai_result["start_time"] = extract_time(text)
+            if not ai_result.get("end_time") and ai_result.get("start_time"):
+                ai_result["end_time"] = extract_end_time(text, ai_result["start_time"])
+            return ai_result
+        else:
+            print(f"    [提取] AI 提取失败，回退到规则模式")
+
+    # ---- 规则模式（默认） ----
     start_time = extract_time(text)
 
     return {
@@ -333,7 +476,7 @@ def extract_activity(article: dict, club: dict) -> dict:
     if content and not article_body:
         full_text += "\n" + content[:2000]
 
-    extracted = extract_activity_fallback(title, full_text)
+    extracted = extract_activity_fallback(title, full_text, article_body)
 
     activity = {
         "id": f"act_{article.get('article_id', '')[:12]}" or f"act_{datetime.now(BEIJING_TZ).timestamp():.0f}",
@@ -350,7 +493,7 @@ def extract_activity(article: dict, club: dict) -> dict:
         "publish_time": article.get("publish_time", ""),
         "contact": extracted["contact"],
         "source": "crawl",
-        "status": compute_status(extracted["start_time"]),
+        "status": _resolve_status(extracted, title),
         "created_at": datetime.now(BEIJING_TZ).isoformat(),
     }
 
@@ -360,20 +503,72 @@ def extract_activity(article: dict, club: dict) -> dict:
 BEIJING_TZ = timezone(timedelta(hours=8))
 
 
-def compute_status(start_time: str) -> str:
-    """根据开始时间计算活动状态（北京时间 UTC+8）"""
-    if not start_time:
-        return "upcoming"
+def compute_status(start_time: str, end_time: str = "") -> str:
+    """根据开始/结束时间计算活动状态（北京时间 UTC+8），支持三状态"""
+    now = datetime.now(BEIJING_TZ)
+
     try:
-        start = datetime.fromisoformat(start_time)
-        now = datetime.now(BEIJING_TZ)
-        if start.tzinfo is None:
-            start = start.replace(tzinfo=BEIJING_TZ)
-        if start < now:
-            return "ended"
+        start_dt = datetime.fromisoformat(start_time) if start_time else None
+    except (ValueError, TypeError):
+        start_dt = None
+
+    try:
+        end_dt = datetime.fromisoformat(end_time) if end_time else None
+    except (ValueError, TypeError):
+        end_dt = None
+
+    if start_dt and start_dt.tzinfo is None:
+        start_dt = start_dt.replace(tzinfo=BEIJING_TZ)
+    if end_dt and end_dt.tzinfo is None:
+        end_dt = end_dt.replace(tzinfo=BEIJING_TZ)
+
+    if end_dt and end_dt < now:
+        return "ended"
+    if start_dt and start_dt <= now:
+        if not end_dt or end_dt > now:
+            return "ongoing"
+        return "ended"
+    if start_dt and start_dt > now:
         return "upcoming"
-    except ValueError:
-        return "upcoming"
+    return "upcoming"
+
+
+# 标题关键词 → 状态推断
+STATUS_TITLE_HINTS = {
+    "ended": ["圆满结束", "精彩回顾", "活动总结", "回顾", "落幕",
+              "收官", "成功举办", "圆满落幕", "圆满结束"],
+    "upcoming": ["预告", "倒计时", "即将", "敬请期待",
+                 "抢鲜", "预热", "剧透", "通知"],
+}
+
+
+def infer_status_from_title(title: str) -> str:
+    """当 start_time/end_time 无法确定时，通过标题关键词推断活动状态"""
+    if not title:
+        return ""
+    for status, keywords in STATUS_TITLE_HINTS.items():
+        for kw in keywords:
+            if kw in title:
+                return status
+    return ""
+
+
+def _resolve_status(extracted: dict, title: str) -> str:
+    """三级状态推断：time-based → title-based → default"""
+    # 1. 优先从时间推断
+    status = compute_status(
+        extracted.get("start_time", ""),
+        extracted.get("end_time", ""),
+    )
+    # 如果有准确的时间数据，直接返回
+    if extracted.get("start_time") or extracted.get("end_time"):
+        return status
+    # 2. 无时间数据时，从标题推断
+    title_status = infer_status_from_title(title)
+    if title_status:
+        return title_status
+    # 3. 默认
+    return "upcoming"
 
 
 def normalize_article(article: dict) -> dict:
@@ -517,7 +712,11 @@ def main():
         enrich_existing_activities()
         return
 
-    print(f"[extract_activity] 提取模式 | mode={CONFIG['mode']}")
+    if CONFIG["mode"] == "ai":
+        key_status = "已配置" if CONFIG["ai"]["api_key"] else "未配置 API key"
+        print(f"[extract_activity] 提取模式 | mode=ai | {key_status}")
+    else:
+        print("[extract_activity] 提取模式 | mode=rule")
 
     # 加载爬虫原始数据
     raw_data = load_json(resolve(CONFIG["raw_path"]), {"articles": []})
