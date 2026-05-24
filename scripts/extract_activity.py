@@ -228,6 +228,67 @@ CONTACT_PATTERNS = [
 END_TIME_PATTERN = re.compile(r"(\d{1,2})[:：](\d{2})\s*[—\-～~至到]\s*(\d{1,2})[:：](\d{2})")
 
 
+# ===== 西南财经大学校园地点库 =====
+
+# 校园地点按长度降序（优先匹配最长具体名称）
+KNOWN_LOCATIONS = sorted([
+    # ---- 柳林校区 - 教学楼 ----
+    "经世楼A区", "经世楼B区", "经世楼C区",
+    "颐德楼H区", "颐德楼I区",
+    "经世楼", "颐德楼", "通博楼", "明德楼", "格致楼", "诚正楼", "弘远楼",
+    # ---- 柳林校区 - 食堂 ----
+    "一粟堂", "三味堂", "五谷堂",
+    # ---- 柳林校区 - 宿舍 ----
+    "梅园", "兰园", "竹园", "菊园", "松园", "榕园", "智园", "慧园", "信园", "敏园",
+    # ---- 柳林校区 - 体育 ----
+    "晨曦体育场", "朝晖体育场",
+    # ---- 柳林校区 - 其他 ----
+    "学生活动中心", "济民广场", "经世楼草坪", "钟楼", "待书轩",
+    # ---- 光华校区 - 教学楼 ----
+    "光华楼", "励志楼", "文渊楼",
+    # ---- 光华校区 - 宿舍 ----
+    "博学园", "明辨园", "笃行园", "致知园", "住友苑",
+    # ---- 光华校区 - 体育 ----
+    "光华体育馆", "光华运动场",
+    # ---- 光华校区 - 其他 ----
+    "光华会堂", "光华门",
+    # ---- 通用跨校区 ----
+    "图书馆", "体育馆",
+], key=len, reverse=True)
+
+# 教学楼楼名列表（用于匹配楼名+房间号）
+CAMPUS_BUILDINGS = [
+    "经世楼", "颐德楼", "通博楼", "明德楼", "格致楼", "诚正楼", "弘远楼",
+    "光华楼", "励志楼", "文渊楼",
+]
+
+# 楼名+房间号模式：如 "经世楼E101" "颐德楼I304"
+BUILDING_ROOM_RE = re.compile(
+    r"(?:" + "|".join(re.escape(b) for b in CAMPUS_BUILDINGS) + r")"
+    r"[A-Za-z]\d{3,4}\b"
+)
+
+
+def match_campus_location(text: str) -> str:
+    """在文本中匹配西南财大已知地点，返回最具体的匹配"""
+    if not text:
+        return ""
+
+    # 1. 优先匹配楼名+房间号（最精确，如"颐德楼I304"）
+    m = BUILDING_ROOM_RE.search(text)
+    if m:
+        return m.group(0).strip()
+
+    # 2. 匹配已知地点名称（按长度降序，最长匹配优先）
+    #    避免过长文本中大量不相关匹配，仅在前 300 字内搜索
+    search_area = text[:300]
+    for loc in KNOWN_LOCATIONS:
+        if loc in search_area:
+            return loc
+
+    return ""
+
+
 # ===== DeepSeek AI 提取 =====
 
 DEEPSEEK_SYSTEM_PROMPT = """你是一个专门从中文社团活动推文中提取结构化信息的助手。
@@ -426,22 +487,27 @@ def extract_time(text: str, ref_time: str = "") -> str:
 
 
 def extract_location(text: str) -> str:
-    """从文本中提取地点，限制 10 字以内，去除噪音"""
+    """从文本中提取地点，优先使用 SWUFE 校园地点库，其次正则"""
     if not text:
         return ""
+
+    # 1. 显式"地点："标签正则（最高精度，明确标注的地址）
     for pattern in LOCATION_PATTERNS:
         match = pattern.search(text)
         if match:
             location = match.group(1).strip().rstrip("。，,.;；：:")
-            # 截断到 10 个字，去除明显噪音
             location = location[:10]
-            # 过滤：不含地点特征词且长度短于 2 的舍弃
             if len(location) < 2:
                 continue
-            # 过滤明显不是地点的文本
             if any(kw in location for kw in ["时间", "电话", "QQ", "微信", "http", "邮箱"]):
                 continue
             return location
+
+    # 2. 校园地点库匹配（楼名+房间号 / 已知名称，覆盖正则遗漏的情况）
+    campus_loc = match_campus_location(text)
+    if campus_loc:
+        return campus_loc
+
     return ""
 
 
