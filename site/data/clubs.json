@@ -47,7 +47,817 @@
       "avatar_url": "",
       "is_active": true,
       "created_at": "2026-05-23"
+    },
+    {
+      "id": "club_005",
+      "name": "光华青年马克思主义发展研究会",
+      "category": "其他",
+      "description": "思想理论类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_006",
+      "name": "光华读书社",
+      "category": "其他",
+      "description": "思想理论类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_007",
+      "name": "廉洁文化社",
+      "category": "其他",
+      "description": "思想理论类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_008",
+      "name": "数据科学协会",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_009",
+      "name": "金融学术之星",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_010",
+      "name": "ERP沙盘俱乐部",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_011",
+      "name": "iOS Club",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_012",
+      "name": "中国家庭金融调查协会",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_013",
+      "name": "光华经济研究会",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_014",
+      "name": "光华学术社",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_015",
+      "name": "大数据财务会计分析协会",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_016",
+      "name": "金融分析协会",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_017",
+      "name": "GREEN SWUFE",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_018",
+      "name": "学生学业指导中心爱学团",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_019",
+      "name": "金融建模协会",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_020",
+      "name": "金融科技协会",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_021",
+      "name": "金融数学协会",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_022",
+      "name": "金融投资协会",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_023",
+      "name": "iBizSim企业竞争模拟协会",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_024",
+      "name": "研究生光华研学社",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_025",
+      "name": "西南财经大学咨询俱乐部",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_026",
+      "name": "swufe青年发展研究工作坊",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_027",
+      "name": "西南财经大学超算协会",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_028",
+      "name": "AI智能体+社",
+      "category": "学术科技",
+      "description": "学术科研类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_029",
+      "name": "森林音乐社",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_030",
+      "name": "以上手工社",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_031",
+      "name": "星空绘画社",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_032",
+      "name": "SDA舞蹈协会",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_033",
+      "name": "24格电影社",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_034",
+      "name": "SWUHA社",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_035",
+      "name": "樱花日语社",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_036",
+      "name": "钢琴社",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_037",
+      "name": "锅庄文化协会",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_038",
+      "name": "万能音乐旅社",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_039",
+      "name": "英语协会",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_040",
+      "name": "飞地LIVE乐社",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_041",
+      "name": "英语辩论协会",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_042",
+      "name": "摄影协会",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_043",
+      "name": "与田动漫社",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_044",
+      "name": "七里厨艺社",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_045",
+      "name": "卿云乐社",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_046",
+      "name": "刀画DIY手工社",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_047",
+      "name": "Craft Crew游戏研创社",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_048",
+      "name": "星光剧团音乐剧社",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_049",
+      "name": "朝花夕拾花艺社",
+      "category": "文化艺术",
+      "description": "文学艺术类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_050",
+      "name": "书画协会",
+      "category": "文化艺术",
+      "description": "传统文化类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_051",
+      "name": "忘川诗社",
+      "category": "文化艺术",
+      "description": "传统文化类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_052",
+      "name": "衣礼子裳汉服社",
+      "category": "文化艺术",
+      "description": "传统文化类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_053",
+      "name": "新声相声社",
+      "category": "文化艺术",
+      "description": "传统文化类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_054",
+      "name": "红楼梦青年学社",
+      "category": "文化艺术",
+      "description": "传统文化类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_055",
+      "name": "文韵琴社",
+      "category": "文化艺术",
+      "description": "传统文化类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_056",
+      "name": "西财石榴红社",
+      "category": "文化艺术",
+      "description": "传统文化类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_057",
+      "name": "篮球协会",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_058",
+      "name": "排球协会",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_059",
+      "name": "乒乓球协会",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_060",
+      "name": "棋牌社",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_061",
+      "name": "台球协会",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_062",
+      "name": "跆拳道社",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_063",
+      "name": "武术协会",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_064",
+      "name": "单车联盟",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_065",
+      "name": "桥牌协会",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_066",
+      "name": "盘客飞盘社",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_067",
+      "name": "网球联合会",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_068",
+      "name": "电子竞技协会",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_069",
+      "name": "游泳协会",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_070",
+      "name": "青鸟瑜伽协会",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_071",
+      "name": "益行社",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_072",
+      "name": "足球协会",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_073",
+      "name": "柳浪湾滑板社",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_074",
+      "name": "西南财经大学体育舞蹈协会",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_075",
+      "name": "西南财经大学滑雪社",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_076",
+      "name": "棒垒球社",
+      "category": "体育竞技",
+      "description": "体育健身类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_077",
+      "name": "Sunshine益行社",
+      "category": "志愿服务",
+      "description": "公益服务类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_078",
+      "name": "纸鸢书院西南财经大学分社",
+      "category": "志愿服务",
+      "description": "公益服务类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_079",
+      "name": "朗目支教公益实践社团",
+      "category": "志愿服务",
+      "description": "公益服务类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_080",
+      "name": "雪域swufer志愿服务社",
+      "category": "志愿服务",
+      "description": "公益服务类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_081",
+      "name": "智讲消防服务队",
+      "category": "志愿服务",
+      "description": "公益服务类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_082",
+      "name": "路见小动物保护协会",
+      "category": "其他",
+      "description": "实践交流类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_083",
+      "name": "戚风公益社",
+      "category": "其他",
+      "description": "实践交流类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_084",
+      "name": "尚益实践创投社",
+      "category": "其他",
+      "description": "实践交流类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_085",
+      "name": "IFC国际友谊社",
+      "category": "其他",
+      "description": "实践交流类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_086",
+      "name": "西部商业管理实践协会",
+      "category": "其他",
+      "description": "实践交流类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_087",
+      "name": "青年探案社",
+      "category": "其他",
+      "description": "实践交流类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_088",
+      "name": "科幻社",
+      "category": "其他",
+      "description": "实践交流类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_089",
+      "name": "学生全球治理与国际组织发展协会",
+      "category": "其他",
+      "description": "实践交流类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_090",
+      "name": "港澳台学生发展协会",
+      "category": "其他",
+      "description": "实践交流类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_091",
+      "name": "模拟联合国协会",
+      "category": "其他",
+      "description": "实践交流类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_092",
+      "name": "创形者模型社",
+      "category": "其他",
+      "description": "实践交流类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_093",
+      "name": "西南财经大学军事爱好者协会",
+      "category": "其他",
+      "description": "实践交流类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_094",
+      "name": "云栖乡创社",
+      "category": "其他",
+      "description": "实践交流类社团",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-24"
     }
   ],
-  "last_updated": "2026-05-23T00:00:00+08:00"
+  "last_updated": "2026-05-24T17:30:00+08:00"
 }
