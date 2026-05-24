@@ -340,10 +340,25 @@ def is_activity_article(title: str) -> bool:
     return False
 
 
-def extract_time(text: str) -> str:
-    """从文本中提取时间，返回 ISO 格式字符串"""
+def extract_time(text: str, ref_time: str = "") -> str:
+    """从文本中提取时间，返回 ISO 格式字符串
+
+    Args:
+        text: 要提取的文本
+        ref_time: 参考时间（如文章 publish_time），用于推断只有月日无年份的时间
+    """
     if not text:
         return ""
+
+    # 解析参考时间
+    ref_dt = None
+    if ref_time:
+        try:
+            ref_dt = datetime.fromisoformat(ref_time)
+            if ref_dt.tzinfo is None:
+                ref_dt = ref_dt.replace(tzinfo=BEIJING_TZ)
+        except (ValueError, TypeError):
+            pass
 
     for pattern in TIME_PATTERNS:
         match = pattern.search(text)
@@ -355,14 +370,20 @@ def extract_time(text: str) -> str:
                     y = y if y > 100 else datetime.now(BEIJING_TZ).year
                     return f"{y:04d}-{m:02d}-{d:02d}T{h:02d}:{mi:02d}:00+08:00"
                 elif len(groups) == 4 and all(g.isdigit() for g in groups if g):
-                    now = datetime.now(BEIJING_TZ)
                     m, d, h, mi = int(groups[0]), int(groups[1]), int(groups[2]), int(groups[3])
-                    y = now.year if m >= now.month else now.year + 1  # 跨年处理
+                    if ref_dt:
+                        y = ref_dt.year if m >= ref_dt.month else ref_dt.year + 1
+                    else:
+                        now = datetime.now(BEIJING_TZ)
+                        y = now.year if m >= now.month else now.year + 1
                     return f"{y:04d}-{m:02d}-{d:02d}T{h:02d}:{mi:02d}:00+08:00"
                 elif len(groups) == 2:
-                    now = datetime.now(BEIJING_TZ)
                     m, d = int(groups[0]), int(groups[1])
-                    y = now.year if m >= now.month else now.year + 1
+                    if ref_dt:
+                        y = ref_dt.year if m >= ref_dt.month else ref_dt.year + 1
+                    else:
+                        now = datetime.now(BEIJING_TZ)
+                        y = now.year if m >= now.month else now.year + 1
                     return f"{y:04d}-{m:02d}-{d:02d}T00:00:00+08:00"
                 else:
                     return match.group(0).strip()
@@ -422,7 +443,7 @@ def extract_end_time(text: str, start_time: str) -> str:
     return ""
 
 
-def extract_activity_fallback(title: str, description: str, article_body: str = "") -> dict:
+def extract_activity_fallback(title: str, description: str, article_body: str = "", publish_time: str = "") -> dict:
     """
     从文章的标题和描述中提取活动信息
     支持 rule 和 ai 两种模式，AI 失败时自动降级到规则模式
@@ -441,7 +462,7 @@ def extract_activity_fallback(title: str, description: str, article_body: str = 
             if not ai_result.get("contact"):
                 ai_result["contact"] = extract_contact(text)
             if not ai_result.get("start_time"):
-                ai_result["start_time"] = extract_time(text)
+                ai_result["start_time"] = extract_time(text, publish_time)
             if not ai_result.get("end_time") and ai_result.get("start_time"):
                 ai_result["end_time"] = extract_end_time(text, ai_result["start_time"])
             return ai_result
@@ -449,7 +470,7 @@ def extract_activity_fallback(title: str, description: str, article_body: str = 
             print(f"    [提取] AI 提取失败，回退到规则模式")
 
     # ---- 规则模式（默认） ----
-    start_time = extract_time(text)
+    start_time = extract_time(text, publish_time)
 
     return {
         "title": title,
@@ -488,7 +509,7 @@ def extract_activity(article: dict, club: dict) -> dict:
     if content and not article_body:
         full_text += "\n" + content[:2000]
 
-    extracted = extract_activity_fallback(title, full_text, article_body)
+    extracted = extract_activity_fallback(title, full_text, article_body, article.get("publish_time", ""))
 
     activity = {
         "id": f"act_{article.get('article_id', '')[:12]}" or f"act_{datetime.now(BEIJING_TZ).timestamp():.0f}",
@@ -534,10 +555,25 @@ def compute_status(start_time: str, end_time: str = "", publish_time: str = "") 
     if end_dt and end_dt.tzinfo is None:
         end_dt = end_dt.replace(tzinfo=BEIJING_TZ)
 
+    # 年份合理性检查：如果 start_time 年份远超发布年份，说明年份推断错误
+    if start_dt and publish_time:
+        try:
+            pub_dt = datetime.fromisoformat(publish_time)
+            if pub_dt.tzinfo is None:
+                pub_dt = pub_dt.replace(tzinfo=BEIJING_TZ)
+            if start_dt.year - pub_dt.year > 1:
+                start_dt = None
+        except (ValueError, TypeError):
+            pass
+
     if end_dt and end_dt < now:
         return "ended"
     if start_dt and start_dt <= now:
         if not end_dt or end_dt > now:
+            if end_dt:
+                return "ongoing"
+            if (now - start_dt).days > 7:
+                return "ended"
             return "ongoing"
         return "ended"
     if start_dt and start_dt > now:
@@ -680,7 +716,7 @@ def enrich_existing_activities():
                 safe_print(f"           提取地点: {location}")
 
         if not act.get("start_time"):
-            start_time = extract_time(text)
+            start_time = extract_time(text, act.get("publish_time", ""))
             if start_time:
                 act["start_time"] = start_time
                 act["status"] = compute_status(start_time)
