@@ -37,6 +37,7 @@ CONFIG = {
     "batch_interval": 60,       # 批次间隔 (秒)
     "max_articles_per_club": 20, # 每个公众号最多获取文章数
     "request_timeout": 15,
+    "max_age_days": 10,          # 仅爬取近 N 天内的文章
 }
 
 # 脚本所在目录的上级 (项目根目录)
@@ -158,12 +159,19 @@ def crawl_club_articles(session, token: str, biz: str, max_count: int = 20) -> l
                 if not link or not title:
                     continue
 
+                create_time = art.get("create_time", 0)
+                # 过滤超过 max_age_days 的旧文章
+                if create_time and create_time > 1000000000:
+                    cutoff_ts = (datetime.now(BEIJING_TZ) - timedelta(days=CONFIG["max_age_days"])).timestamp()
+                    if create_time < cutoff_ts:
+                        continue
+
                 article = {
                     "aid": aid,
                     "title": title,
                     "link": link,
                     "cover": art.get("cover", ""),
-                    "create_time": art.get("create_time", 0),
+                    "create_time": create_time,
                     "update_time": art.get("update_time", 0),
                     "digest": art.get("digest", ""),
                     "copyright_stat": art.get("copyright_stat", 0),

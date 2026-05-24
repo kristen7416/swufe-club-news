@@ -40,10 +40,11 @@ BEIJING_TZ = timezone(timedelta(hours=8))
 
 # 标题关键词 → 状态推断（与 extract_activity.py 保持一致）
 STATUS_TITLE_HINTS = {
-    "ended": ["圆满结束", "精彩回顾", "活动总结", "回顾", "落幕",
-              "收官", "成功举办", "圆满落幕", "圆满结束"],
+    "ended": ["圆满结束", "圆满落幕", "圆满", "精彩回顾", "活动总结",
+              "回顾", "落幕", "收官", "成功举办", "顺利举办",
+              "顺利举行", "顺利结束", "顺利闭幕", "圆满完成"],
     "upcoming": ["预告", "倒计时", "即将", "敬请期待",
-                 "抢鲜", "预热", "剧透", "通知"],
+                 "抢鲜", "预热", "剧透", "通知", "报名"],
 }
 
 
@@ -88,6 +89,20 @@ def compute_status(activity: dict) -> str:
         return "ended"
     if start_dt and start_dt > now:
         return "upcoming"
+
+    # 启发式：发布时间 > 7天 且 开始时间 > 1天前 → 已结束
+    pub_str = activity.get("publish_time", "")
+    if pub_str and start_dt:
+        try:
+            pub_dt = datetime.fromisoformat(pub_str)
+            if pub_dt.tzinfo is None:
+                pub_dt = pub_dt.replace(tzinfo=BEIJING_TZ)
+            days_since_pub = (now - pub_dt).days
+            days_since_start = (now - start_dt).days
+            if days_since_pub > 7 and days_since_start > 1:
+                return "ended"
+        except (ValueError, TypeError):
+            pass
 
     # 无时间数据 → 标题关键词降级推断
     if not start and not end:

@@ -163,24 +163,6 @@
       "created_at": "2026-05-23T18:52:35.183380"
     },
     {
-      "id": "act_2652441902_1",
-      "club_id": "club_002",
-      "title": "2024“金融杯”羽毛球比赛顺利举办！",
-      "description": "2024“金融杯”羽毛球比赛精彩回顾，一起来看看吧~",
-      "category": "体育竞技",
-      "location": "",
-      "start_time": "",
-      "end_time": "",
-      "article_url": "https://mp.weixin.qq.com/s/F2XCf7CCdZIGOBT_ChmhlQ",
-      "article_id": "2652441902_1",
-      "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/aJ5fqoRXu4icCj6uc1aaiaRXrCH6vARFhk3ING7PnE4rfILMZfetdN9rT7BAV2m73MoDCqaVGW6rQarEmibUTNxIw/0?wx_fmt=jpeg",
-      "publish_time": "2024-11-25T05:03:01+00:00",
-      "contact": "",
-      "source": "crawl",
-      "status": "upcoming",
-      "created_at": "2026-05-23T19:16:38.399933"
-    },
-    {
       "id": "act_2247484913_1",
       "club_id": "club_003",
       "title": "解锁数模er的初次集结！破冰活动带你玩转思维",
@@ -305,24 +287,6 @@
       "source": "crawl",
       "status": "upcoming",
       "created_at": "2026-05-23T19:16:38.400293"
-    },
-    {
-      "id": "act_2247483801_1",
-      "club_id": "club_004",
-      "title": "2023年度西南财经大学模拟法庭大赛赛前经验分享会圆满举办",
-      "description": "2023年度西南财经大学模拟法庭大赛赛前经验分享会圆满举办",
-      "category": "学术科技",
-      "location": "",
-      "start_time": "",
-      "end_time": "",
-      "article_url": "https://mp.weixin.qq.com/s/__1139u_gFQ8Pj_Hp9F4LQ",
-      "article_id": "2247483801_1",
-      "cover_url": "http://mmbiz.qpic.cn/mmbiz_png/0fXibrrqxCQiaSia8tKZ9SzATvjMenGmG9OU0aib2agqUVXFMMFTHWbbUgkNmo0jSOmCQOzFyzKhWUpmGlJRQUN9xA/0?wx_fmt=png",
-      "publish_time": "2023-04-01T18:08:26+00:00",
-      "contact": "",
-      "source": "crawl",
-      "status": "upcoming",
-      "created_at": "2026-05-23T19:16:38.400654"
     },
     {
       "id": "act_2247484032_1",
@@ -739,6 +703,42 @@
       "created_at": "2026-05-23T19:16:38.400004"
     },
     {
+      "id": "act_2652441902_1",
+      "club_id": "club_002",
+      "title": "2024“金融杯”羽毛球比赛顺利举办！",
+      "description": "2024“金融杯”羽毛球比赛精彩回顾，一起来看看吧~",
+      "category": "体育竞技",
+      "location": "",
+      "start_time": "",
+      "end_time": "",
+      "article_url": "https://mp.weixin.qq.com/s/F2XCf7CCdZIGOBT_ChmhlQ",
+      "article_id": "2652441902_1",
+      "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/aJ5fqoRXu4icCj6uc1aaiaRXrCH6vARFhk3ING7PnE4rfILMZfetdN9rT7BAV2m73MoDCqaVGW6rQarEmibUTNxIw/0?wx_fmt=jpeg",
+      "publish_time": "2024-11-25T05:03:01+00:00",
+      "contact": "",
+      "source": "crawl",
+      "status": "ended",
+      "created_at": "2026-05-23T19:16:38.399933"
+    },
+    {
+      "id": "act_2247483801_1",
+      "club_id": "club_004",
+      "title": "2023年度西南财经大学模拟法庭大赛赛前经验分享会圆满举办",
+      "description": "2023年度西南财经大学模拟法庭大赛赛前经验分享会圆满举办",
+      "category": "学术科技",
+      "location": "",
+      "start_time": "",
+      "end_time": "",
+      "article_url": "https://mp.weixin.qq.com/s/__1139u_gFQ8Pj_Hp9F4LQ",
+      "article_id": "2247483801_1",
+      "cover_url": "http://mmbiz.qpic.cn/mmbiz_png/0fXibrrqxCQiaSia8tKZ9SzATvjMenGmG9OU0aib2agqUVXFMMFTHWbbUgkNmo0jSOmCQOzFyzKhWUpmGlJRQUN9xA/0?wx_fmt=png",
+      "publish_time": "2023-04-01T18:08:26+00:00",
+      "contact": "",
+      "source": "crawl",
+      "status": "ended",
+      "created_at": "2026-05-23T19:16:38.400654"
+    },
+    {
       "id": "act_2247484121_1",
       "club_id": "club_001",
       "title": "金秋缘定 与你不语｜不语配音社秋季招新圆满结束",
@@ -883,11 +883,11 @@
       "created_at": "2026-05-23T19:16:38.400627"
     }
   ],
-  "last_updated": "2026-05-24T14:50:31.534521+08:00",
+  "last_updated": "2026-05-24T15:22:37.276607+08:00",
   "total_count": 49,
   "status_counts": {
-    "upcoming": 36,
+    "upcoming": 34,
     "ongoing": 5,
-    "ended": 8
+    "ended": 10
   }
 }
