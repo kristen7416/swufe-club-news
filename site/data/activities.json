@@ -1,24 +1,6 @@
 {
   "activities": [
     {
-      "id": "act_2650005426_1",
-      "club_id": "club_022",
-      "title": "洞察市场 智胜千里|CFA全球分析大赛校内选拔赛即将启幕",
-      "description": "CFA全球投资分析大赛（CFA Research Challenge）是CFA协会面向全球高校举办的顶级投资分析赛事。本次校内选拔赛由西南财经大学金融学院主办，优胜队伍将代表学校参加中国西部赛区决赛，并有机会晋级亚太区及全球总决赛。比赛分为研究报告撰写和现场答辩两部分，报名时间为2026年5月15日至5月30日。",
-      "category": "学术科技",
-      "location": "",
-      "start_time": "2026-05-15T00:00:00+08:00",
-      "end_time": "2026-05-30T23:59:59+08:00",
-      "article_url": "https://mp.weixin.qq.com/s/1MxqFEagOuuNdrDMS0--wg",
-      "article_id": "2650005426_1",
-      "cover_url": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/rAbssNyKNjR6qWCw6PWh5QZlKzLhibsUmZNibNicnEaMMDNLqUlQfv5jUTNYHgkE0dwDhPpPkUFLzcNV6sVlgEg3Y68gibqh9N6m8dTCp97uvbE/0?wx_fmt=jpeg",
-      "publish_time": "2026-05-19T18:27:09+08:00",
-      "contact": "",
-      "source": "crawl",
-      "status": "ongoing",
-      "created_at": "2026-05-24T17:51:22.780352+08:00"
-    },
-    {
       "id": "act_2247511476_1",
       "club_id": "club_005",
       "title": "光华经典读书会：历史唯物主义的经典表述——《政治经济学批判序言》解读",
@@ -125,6 +107,23 @@
       "source": "crawl",
       "status": "upcoming",
       "created_at": "2026-05-24T17:51:04.612215+08:00"
+    },
+    {
+      "id": "manual_test_fe508f",
+      "club_id": "club_022",
+      "title": "[测试] 请忽略 - 端到端测试 205901",
+      "description": "这是端到端测试数据，验证发布流程",
+      "category": "学术科技",
+      "location": "测试地点",
+      "start_time": "2026-07-01T14:00:00+08:00",
+      "end_time": "2026-07-01T16:00:00+08:00",
+      "article_url": "https://mp.weixin.qq.com/s/1MxqFEagOuuNdrDMS0--wg",
+      "cover_url": "",
+      "publish_time": "2026-05-25T20:59:01.161979+08:00",
+      "contact": "test@test.com",
+      "source": "manual",
+      "status": "upcoming",
+      "created_at": "2026-05-25T20:59:01.161979+08:00"
     },
     {
       "id": "act_2247484008_1",
@@ -1063,11 +1062,11 @@
       "created_at": "2026-05-23T19:16:38.400004"
     }
   ],
-  "last_updated": "2026-05-25T11:56:51.972695+08:00",
+  "last_updated": "2026-05-25T20:59:01.161979+08:00",
   "total_count": 59,
   "status_counts": {
-    "upcoming": 1,
-    "ongoing": 6,
+    "upcoming": 2,
+    "ongoing": 5,
     "ended": 52
   }
 }
