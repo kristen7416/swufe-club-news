@@ -71,6 +71,7 @@ def extract_wechat_name(article_url):
         return None, f"无法访问文章页面: {str(e)}"
 
     patterns = [
+        r'var nickname\s*=\s*htmlDecode\(["\']([^"\']+)["\']\)',
         r'var nickname\s*=\s*["\']([^"\']+)["\']',
         r'var nick_name\s*=\s*["\']([^"\']+)["\']',
         r'profile_nickname\s*=\s*["\']([^"\']+)["\']',
