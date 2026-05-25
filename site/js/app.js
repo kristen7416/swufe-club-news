@@ -36,6 +36,10 @@
     DOM.dialogFooter = document.getElementById('dialogFooter');
     DOM.dialogClose = document.getElementById('closeDialog');
     DOM.lastUpdated = document.getElementById('lastUpdated');
+    DOM.shareBtn = document.getElementById('shareBtn');
+    DOM.qrOverlay = document.getElementById('qrOverlay');
+    DOM.qrClose = document.getElementById('qrClose');
+    DOM.qrCode = document.getElementById('qrCode');
   }
 
   // ===== 工具函数 =====
@@ -346,8 +350,19 @@
       const btn = e.target.closest('.btn-secondary');
       if (btn) closeDialog();
     });
+
+    // 分享
+    DOM.shareBtn?.addEventListener('click', openShare);
+    DOM.qrClose?.addEventListener('click', closeShare);
+    DOM.qrOverlay?.addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeShare();
+    });
+
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && DOM.dialogOverlay?.classList.contains('open')) closeDialog();
+      if (e.key === 'Escape') {
+        if (DOM.qrOverlay?.classList.contains('open')) closeShare();
+        else if (DOM.dialogOverlay?.classList.contains('open')) closeDialog();
+      }
     });
   }
 
@@ -418,6 +433,39 @@
     const url = new URL(location);
     url.searchParams.delete('id');
     history.replaceState(null, '', url);
+  }
+
+  // ===== 分享二维码 =====
+
+  let qrInstance = null;
+
+  function openShare() {
+    if (typeof QRCode === 'undefined') {
+      DOM.qrCode.innerHTML = '<p style="color:var(--text-muted);padding:80px 0">二维码库加载中，请稍后重试</p>';
+      DOM.qrOverlay.classList.add('open');
+      return;
+    }
+
+    if (!qrInstance) {
+      qrInstance = new QRCode(DOM.qrCode, {
+        text: window.location.origin,
+        width: 184,
+        height: 184,
+        colorDark: '#003D7A',
+        colorLight: '#FFFFFF',
+        correctLevel: QRCode.CorrectLevel.H,
+      });
+    }
+
+    DOM.qrOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeShare() {
+    DOM.qrOverlay.classList.remove('open');
+    if (!DOM.dialogOverlay?.classList.contains('open')) {
+      document.body.style.overflow = '';
+    }
   }
 
   // ===== 顶部区域折叠 (25% → 15%) =====

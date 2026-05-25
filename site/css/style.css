@@ -851,6 +851,133 @@ input { font-family: inherit; }
 .footer-sep { margin: 0 8px; opacity: 0.3; }
 .footer-sub { font-size: 12px; }
 
+/* --- 分享按钮 --- */
+.share-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.share-btn:hover {
+  color: var(--swufe-blue);
+  border-color: var(--swufe-blue-light);
+  box-shadow: var(--shadow-sm);
+}
+
+/* --- 二维码卡片遮罩 --- */
+.qr-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 300;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.qr-overlay.open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* --- 二维码卡片 --- */
+.qr-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  padding: 40px 32px 32px;
+  width: 320px;
+  text-align: center;
+  box-shadow: var(--shadow-xl);
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.qr-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 18px;
+  transition: var(--transition);
+}
+
+.qr-close:hover {
+  background: var(--border);
+  color: var(--text-primary);
+}
+
+.qr-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.qr-logo {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, var(--swufe-blue), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+}
+
+.qr-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.qr-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.qr-code {
+  width: 200px;
+  height: 200px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: white;
+  padding: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  margin-bottom: 4px;
+}
+
+.qr-code canvas { display: none; }
+.qr-code img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.qr-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
 /* --- 动画 --- */
 @keyframes fadeUp {
   from {
@@ -927,6 +1054,15 @@ input { font-family: inherit; }
   .dialog-header { padding: 20px 20px 12px; }
   .dialog-body { padding: 0 20px 20px; }
   .dialog-title { font-size: 16px; }
+
+  .share-btn { width: 36px; height: 36px; }
+  .share-btn svg { width: 17px; height: 17px; }
+
+  .qr-overlay.open { padding: 16px; }
+  .qr-card { padding: 32px 24px 24px; width: 290px; }
+  .qr-code { width: 170px; height: 170px; padding: 6px; }
+  .qr-logo { font-size: 24px; }
+  .qr-title { font-size: 16px; }
 
   .footer-inner { padding: 0 16px; }
 }
