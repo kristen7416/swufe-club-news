@@ -30,6 +30,13 @@
         <span class="search-icon">⌕</span>
         <input type="search" id="searchInput" placeholder="搜索活动或社团..." aria-label="搜索">
       </div>
+      <button class="share-btn" id="shareBtn" aria-label="分享平台">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+          <polyline points="16 6 12 2 8 6"/>
+          <line x1="12" y1="2" x2="12" y2="15"/>
+        </svg>
+      </button>
     </div>
   </header>
 
@@ -114,7 +121,22 @@
     </div>
   </div>
 
+  <!-- 分享二维码卡片 -->
+  <div class="qr-overlay" id="qrOverlay" role="dialog" aria-modal="true">
+    <div class="qr-card">
+      <button class="qr-close" id="qrClose" aria-label="关闭">✕</button>
+      <div class="qr-card-body">
+        <div class="qr-logo">SWUFE</div>
+        <h3 class="qr-title">社团活动资讯</h3>
+        <p class="qr-desc">聚合西南财经大学社团活动资讯<br>不再错过精彩</p>
+        <div class="qr-code" id="qrCode"></div>
+        <p class="qr-hint">扫码访问社团资讯平台</p>
+      </div>
+    </div>
+  </div>
+
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
