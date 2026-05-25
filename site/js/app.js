@@ -448,7 +448,7 @@
 
     if (!qrInstance) {
       qrInstance = new QRCode(DOM.qrCode, {
-        text: window.location.origin,
+        text: new URL('/', window.location.href).href,
         width: 184,
         height: 184,
         colorDark: '#003D7A',
