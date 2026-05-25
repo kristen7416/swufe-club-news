@@ -954,6 +954,9 @@ input { font-family: inherit; }
 }
 
 .qr-code {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 200px;
   height: 200px;
   border-radius: var(--radius-md);
@@ -961,15 +964,11 @@ input { font-family: inherit; }
   background: white;
   padding: 8px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  margin-bottom: 4px;
+  margin: 0 auto 4px;
 }
 
-.qr-code canvas { display: none; }
-.qr-code img {
-  display: block;
+.qr-code table {
   margin: 0 auto;
-  max-width: 100%;
-  height: auto;
 }
 
 .qr-hint {
