@@ -977,6 +977,37 @@ input { font-family: inherit; }
   margin-top: 4px;
 }
 
+/* --- 保存按钮 --- */
+.save-btn {
+  margin-top: 16px;
+  padding: 10px 32px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, var(--swufe-blue), var(--swufe-blue-light));
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  min-width: 140px;
+}
+
+.save-btn:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.save-btn:active {
+  transform: translateY(0);
+}
+
+.save-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
+}
+
 /* --- 动画 --- */
 @keyframes fadeUp {
   from {

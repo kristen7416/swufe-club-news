@@ -40,6 +40,7 @@
     DOM.qrOverlay = document.getElementById('qrOverlay');
     DOM.qrClose = document.getElementById('qrClose');
     DOM.qrCode = document.getElementById('qrCode');
+    DOM.saveBtn = document.getElementById('saveBtn');
   }
 
   // ===== 工具函数 =====
@@ -357,6 +358,7 @@
     DOM.qrOverlay?.addEventListener('click', (e) => {
       if (e.target === e.currentTarget) closeShare();
     });
+    DOM.saveBtn?.addEventListener('click', saveCard);
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
@@ -461,6 +463,14 @@
 
     DOM.qrOverlay.classList.add('open');
     document.body.style.overflow = 'hidden';
+
+    // 预加载 html2canvas（用户点保存时立即可用）
+    if (typeof html2canvas === 'undefined' && !window.__html2canvasLoading) {
+      window.__html2canvasLoading = true;
+      var el = document.createElement('script');
+      el.src = 'js/html2canvas.min.js';
+      document.body.appendChild(el);
+    }
   }
 
   function closeShare() {
@@ -468,6 +478,47 @@
     if (!DOM.dialogOverlay?.classList.contains('open')) {
       document.body.style.overflow = '';
     }
+  }
+
+  function saveCard() {
+    if (typeof html2canvas === 'undefined') {
+      DOM.saveBtn.textContent = '加载中...';
+      DOM.saveBtn.disabled = true;
+      // 500ms 后重试
+      setTimeout(function () {
+        if (typeof html2canvas !== 'undefined') {
+          DOM.saveBtn.textContent = '保存图片';
+          DOM.saveBtn.disabled = false;
+          saveCard();
+        } else {
+          DOM.saveBtn.textContent = '加载失败，请重试';
+          DOM.saveBtn.disabled = false;
+        }
+      }, 500);
+      return;
+    }
+
+    DOM.saveBtn.textContent = '生成中...';
+    DOM.saveBtn.disabled = true;
+
+    html2canvas(document.querySelector('.qr-card'), {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+    }).then(function (canvas) {
+      canvas.toBlob(function (blob) {
+        var link = document.createElement('a');
+        link.download = 'swufe-club-qr.png';
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        URL.revokeObjectURL(link.href);
+        DOM.saveBtn.textContent = '保存图片';
+        DOM.saveBtn.disabled = false;
+      });
+    }).catch(function () {
+      DOM.saveBtn.textContent = '保存失败';
+      DOM.saveBtn.disabled = false;
+    });
   }
 
   // ===== 顶部区域折叠 (25% → 15%) =====
