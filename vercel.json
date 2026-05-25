@@ -2,6 +2,12 @@
   "framework": null,
   "outputDirectory": "site",
   "regions": ["hkg1"],
+  "functions": {
+    "api/submit-activity.py": {
+      "maxDuration": 30,
+      "memory": 256
+    }
+  },
   "headers": [
     {
       "source": "/data/(.*)",

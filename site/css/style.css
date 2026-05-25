@@ -872,6 +872,139 @@ input { font-family: inherit; }
   box-shadow: var(--shadow-sm);
 }
 
+/* --- 发布按钮 --- */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.publish-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--swufe-blue), var(--swufe-blue-light));
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  transition: var(--transition);
+  border: none;
+  cursor: pointer;
+}
+
+.publish-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 61, 122, 0.3);
+}
+
+.publish-btn:active {
+  transform: translateY(0);
+}
+
+/* --- 发布表单 --- */
+.publish-panel {
+  max-width: 540px !important;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.form-label .required {
+  color: var(--accent);
+}
+
+.form-hint {
+  display: block;
+  font-weight: 400;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: inherit;
+  transition: var(--transition);
+  outline: none;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--swufe-blue-light);
+  box-shadow: 0 0 0 3px rgba(26, 95, 168, 0.12);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-row {
+  display: flex;
+  gap: 14px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.publish-status {
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 4px;
+  display: none;
+}
+
+.publish-status--error {
+  display: block;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.publish-status--success {
+  display: block;
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.publish-status--info {
+  display: block;
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
 /* --- 二维码卡片遮罩 --- */
 .qr-overlay {
   display: none;
@@ -1087,6 +1220,12 @@ input { font-family: inherit; }
 
   .share-btn { width: 36px; height: 36px; }
   .share-btn svg { width: 17px; height: 17px; }
+
+  .publish-btn { height: 32px; padding: 0 12px; font-size: 12px; }
+  .publish-btn svg { width: 16px; height: 16px; }
+
+  .publish-panel { border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important; }
+  .form-row { flex-direction: column; gap: 0; }
 
   .qr-overlay.open { padding: 16px; }
   .qr-card { padding: 32px 24px 24px; width: 290px; }
