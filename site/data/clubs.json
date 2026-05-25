@@ -317,7 +317,7 @@
     {
       "id": "club_032",
       "name": "SDA舞蹈协会",
-      "wechat_name": "西财舞协",
+      "wechat_name": "SDA舞协",
       "biz": "MzI5MTM5OTkzMA==",
       "category": "文化艺术",
       "description": "西南财经大学SDA舞蹈协会，综合性舞蹈社团",
@@ -913,7 +913,17 @@
       "is_active": true,
       "is_aggregator": true,
       "created_at": "2026-05-24"
+    },
+    {
+      "id": "club_096",
+      "name": "星光剧幕音乐剧社",
+      "wechat_name": "SWUFE Illustrious Theater",
+      "category": "文化艺术",
+      "description": "西南财经大学星光剧幕音乐剧社",
+      "avatar_url": "",
+      "is_active": true,
+      "created_at": "2026-05-25"
     }
   ],
-  "last_updated": "2026-05-24T22:30:00+08:00"
+  "last_updated": "2026-05-25T21:35:00+08:00"
 }
