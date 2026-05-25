@@ -1,21 +1,3 @@
 {
-  "activities": [
-    {
-      "id": "manual_test_fe508f",
-      "club_id": "club_022",
-      "title": "[测试] 请忽略 - 端到端测试 205901",
-      "description": "这是端到端测试数据，验证发布流程",
-      "category": "学术科技",
-      "location": "测试地点",
-      "start_time": "2026-07-01T14:00:00+08:00",
-      "end_time": "2026-07-01T16:00:00+08:00",
-      "article_url": "https://mp.weixin.qq.com/s/1MxqFEagOuuNdrDMS0--wg",
-      "cover_url": "",
-      "publish_time": "2026-05-25T20:59:01.161979+08:00",
-      "contact": "test@test.com",
-      "source": "manual",
-      "status": "upcoming",
-      "created_at": "2026-05-25T20:59:01.161979+08:00"
-    }
-  ]
+  "activities": []
 }
