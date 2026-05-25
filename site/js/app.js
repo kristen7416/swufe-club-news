@@ -437,24 +437,26 @@
 
   // ===== 分享二维码 =====
 
-  let qrInstance = null;
+  let qrGenerated = false;
 
   function openShare() {
-    if (typeof QRCode === 'undefined') {
+    if (typeof qrcode === 'undefined') {
       DOM.qrCode.innerHTML = '<p style="color:var(--text-muted);padding:80px 0">二维码库加载中，请稍后重试</p>';
       DOM.qrOverlay.classList.add('open');
       return;
     }
 
-    if (!qrInstance) {
-      qrInstance = new QRCode(DOM.qrCode, {
-        text: new URL('/', window.location.href).href,
-        width: 184,
-        height: 184,
-        colorDark: '#003D7A',
-        colorLight: '#FFFFFF',
-        correctLevel: QRCode.CorrectLevel.H,
-      });
+    if (!qrGenerated) {
+      // 构造站点根 URL（兼容 GitHub Pages 子目录部署）
+      var path = window.location.pathname;
+      var basePath = path.substring(0, path.lastIndexOf('/') + 1);
+      var siteUrl = window.location.origin + basePath;
+
+      var qr = qrcode(0, 'M');
+      qr.addData(siteUrl);
+      qr.make();
+      DOM.qrCode.innerHTML = qr.createTableTag(4);
+      qrGenerated = true;
     }
 
     DOM.qrOverlay.classList.add('open');
