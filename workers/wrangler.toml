@@ -1,0 +1,9 @@
+name = "swufe-publish"
+main = "publish-worker.js"
+compatibility_date = "2026-05-26"
+
+[vars]
+GITHUB_REPO = "kristen7416/swufe-club-news"
+
+# Required secrets (set with `wrangler secret put GITHUB_TOKEN`):
+# GITHUB_TOKEN  — GitHub Personal Access Token with repo/content write access
