@@ -5,7 +5,12 @@
 (function () {
   'use strict';
 
-  const DOM = {};
+  // ===== 发布 API 配置 =====
+  // Cloudflare Worker URL（部署后替换为实际地址）
+  // Vercel 备选: '/api/submit-activity'（国内可能不可达）
+  var PUBLISH_API_URL = 'https://swufe-publish.swufe-news.workers.dev';
+
+  var DOM = {};
 
   function cacheDom() {
     DOM.publishBtn = document.getElementById('publishBtn');
@@ -115,7 +120,7 @@
     setStatus('正在验证公众号身份，请稍候...', 'info');
 
     try {
-      var resp = await fetch('/api/submit-activity', {
+      var resp = await fetch(PUBLISH_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -139,8 +144,13 @@
         setStatus('❌ ' + (result.message || '发布失败，请重试'), 'error');
       }
     } catch (err) {
-      setStatus('❌ 网络错误，请检查网络后重试', 'error');
       console.error('发布失败:', err);
+      // 检查是否是 Worker URL 未配置占位符
+      if (PUBLISH_API_URL.indexOf('your-subdomain') !== -1) {
+        setStatus('⚠️ 发布服务尚未配置，请联系管理员部署 Cloudflare Worker', 'error');
+      } else {
+        setStatus('❌ 网络错误，请稍后重试。如持续失败，请联系社团管理团队手动录入', 'error');
+      }
     } finally {
       DOM.submitBtn.disabled = false;
       DOM.submitBtn.textContent = '提交发布';

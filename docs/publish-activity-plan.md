@@ -28,7 +28,11 @@
 
 ## 二、方案对比
 
-### 方案一（推荐）：Vercel API + 前端发布表单
+### 方案一（当前实现）：Vercel API（已部署，中国不可达）
+
+> 已实现但 `.vercel.app` 域名在国内被阻断。已被方案三替代。
+
+### 方案三（推荐）：Cloudflare Worker + 前端发布表单
 
 **架构**：
 
@@ -77,8 +81,6 @@
 - Vercel API 函数（含公众号名验证）：~150 行 Python
 - 前端表单 UI + JS：~150 行 HTML/CSS + ~100 行 JS
 - 总工作量：约 1 个工作日
-
----
 
 ### 方案二：GitHub Issue 模板 + Actions 自动化
 
